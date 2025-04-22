@@ -1,0 +1,206 @@
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[project]
+name = "risklab"
+version = "1.0.0"
+authors = [
+  { name="Mark Aron Szulyovszky", email="mark@unravel.finance" },
+  { name="Daniel Szemerey", email="daniel@unravel.finance" },
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "License :: Other/Proprietary License",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+  "numpy~=2.1.0",
+  "pandas~=2.2.3",
+  "tqdm~=4.66.4",
+  "iteration_utilities~=0.12.1",
+  "more_itertools~=10.3.0",
+  "typing_extensions~=4.12.2",
+  "pathos~=0.3.2",
+  "scikit-learn~=1.5.2",
+  "python-dotenv~=1.0.1",
+  "tabulate==0.9.0",
+  "matplotlib==3.9.2",
+  "seaborn==0.13.2"
+]
+description = ""
+keywords = []
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.11"
+
+[tool.hatch.version]
+path = "src/risklab/__init__.py"
+
+
+[project.urls]
+Issues = "https://github.com/dream-faster/risklab/issues"
+Source = "https://github.com/dream-faster/risklab"
+
+[project.optional-dependencies]
+quality = [
+  "ruff==0.1.11",
+  "pre-commit~=2.20.0",
+]
+tests = [
+  "pytest~=7.1.2",
+  "pytest-cov>=4.0",
+  "hypothesis~=6.112.4"
+]
+
+
+# bumpver command: ``bumpver update --patch``
+[tool.bumpver]
+current_version = "4.0.13"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message = "chore(Release): Bump version from {old_version} -> {new_version}"
+commit = true
+tag = true
+push = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"',
+    'version = "{version}"'
+]
+
+
+
+[tool.hatch.envs.quality]
+dependencies = [
+  "risklab[quality]"
+]
+detached = true
+
+[tool.hatch.envs.quality.scripts]
+check = [
+  "ruff lint .",
+]
+format = [
+  "ruff format .",
+]
+
+[tool.hatch.envs.test]
+dependencies = ["risklab[tests]"]
+
+[tool.hatch.envs.test.scripts]
+run = "pytest tests/ --durations 0 -s"
+
+[tool.isort]
+profile = "black"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "/.github",
+  "/docs",
+  "/.devcontainer",
+  "/.pre-commit-config.yaml",
+  "/.gitignore",
+  "/tests",
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
+testpaths = ["tests"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.ruff]
+target-version = "py312"
+
+ignore = ["RUF200", "DTZ011","PD901", "PGH003", "COM812", "ISC001", "PD101", "C408", "DTZ005", "E501", "PLR2004", "PLR0913", "B904", "N803", "ARG001", "ARG002", "PD010", "N806", "I001", "TID252", "N802", "A002", "PD011", "PGH004", "N818", "PLR0911", "PT011", "PD003", "DTZ001", "INP001", "N815", "A003"]
+
+select = [
+  # pyflakes
+  "F",
+  # pycodestyle
+  "E",
+  "W",
+  # isort
+  "I",
+  # pep8-naming
+  "N",
+  # pyupgrade
+  "UP",
+  # flake8-annotations
+  # "ANN",
+  # flake8-bandit
+  # "S",
+  # flake8-blind-except
+  "BLE",
+  # flake8-boolean-trap
+  # "FBT",
+  # flake8-bugbear
+  "B",
+  # flake8-builtins
+  "A",
+  # flake8-commas
+  "COM",
+  # flake8-comprehensions
+  "C4",
+  # flake8-datetimez
+  "DTZ",
+  # flake8-debugger
+  "T10",
+  # flake8-errmsg
+  # "EM",
+  # flake8-executable
+  # "EXE",
+  # flake8-implicit-str-concat
+  "ISC",
+  # flake8-import-conventions
+  "ICN",
+  # flake8-logging-format
+  # "G",
+  # flake8-no-pep420
+  "INP",
+  # flake8-pie
+  "PIE",
+  # flake8-print
+  # "T20",
+  # flake8-pytest-style
+  "PT",
+  # flake8-quotes
+  "Q",
+  # flake8-return
+  "RET",
+  # flake8-simplify
+  "SIM",
+  # flake8-tidy-imports
+  "TID",
+  # flake8-type-checking
+  # "TCH",
+  # flake8-unused-arguments
+  "ARG",
+  # flake8-use-pathlib
+  "PTH",
+  # pandas-vet
+  "PD",
+  # pygrep-hooks
+  "PGH",
+  # pylint
+  "PLE", "PLR", "PLW",
+  # flake8-raise
+  "RSE",
+  # ruff-specific rules
+  "RUF"
+]
+fixable = ["ALL"]
+unsafe-fixes = true
+
+[per-file-ignores]
+"__init__.py" = ["E", "F", "I", "N", "F403"]
+
+
