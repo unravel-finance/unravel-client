@@ -4,7 +4,7 @@ requires = ["hatchling"]
 
 [project]
 name = "risklab"
-version = "1.0.0"
+version = "0.0.1"
 authors = [
   { name="Mark Aron Szulyovszky", email="mark@unravel.finance" },
   { name="Daniel Szemerey", email="daniel@unravel.finance" },
@@ -51,7 +51,7 @@ tests = [
 
 # bumpver command: ``bumpver update --patch``
 [tool.bumpver]
-current_version = "4.0.13"
+current_version = "0.0.1"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "chore(Release): Bump version from {old_version} -> {new_version}"
 commit = true
