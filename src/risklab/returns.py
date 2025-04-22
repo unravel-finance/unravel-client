@@ -7,7 +7,7 @@ import pandas as pd
 T = TypeVar("T", pd.Series, pd.DataFrame)
 
 
-def compsum(returns):
+def compsum(returns: pd.Series) -> pd.Series:
     """Calculates rolling compounded returns"""
     return returns.add(1).cumprod() - 1
 
