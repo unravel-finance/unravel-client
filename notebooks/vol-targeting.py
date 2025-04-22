@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from risklab.backtest import backtest_signal
 from risklab.returns import rebase, to_prices
-from risklab.signal import TargetCalculation, scale_to_target_volatility
+from risklab.signal import scale_to_target_volatility
 from risklab.stats import sharpe, to_drawdown_series
 
 sp500 = yf.Ticker("SPY")
@@ -58,7 +58,6 @@ vol_signal = scale_to_target_volatility(
     rolling_window=30,
     returns=sp500_data["Close"].pct_change(),
     upper_limit=2.0,
-    method=TargetCalculation.absolute,
     delay=0,
     fill_initial_period_with_mean=False,
 )

@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 
 from risklab import scale_to_target_volatility
-from risklab.signal import TargetCalculation
 
 
 def test_volatility_targeting():
@@ -14,7 +13,6 @@ def test_volatility_targeting():
         rolling_window=window,
         returns=returns,
         upper_limit=1.0,
-        method=TargetCalculation.absolute,
         delay=0,
         fill_initial_period_with_mean=False,
     )
