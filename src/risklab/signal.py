@@ -3,10 +3,13 @@ from enum import Enum
 
 import pandas as pd
 
-from .window import calculate_window_size
 
 ReturnsDataFrame = pd.DataFrame
 VolScaledSignal = pd.Series
+
+
+def calculate_window_size(window_size: int | float, length: int) -> int:
+    return window_size if window_size > 1 else int(length * window_size)  # type: ignore
 
 
 class TargetCalculation(Enum):
