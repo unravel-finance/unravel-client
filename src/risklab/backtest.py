@@ -71,7 +71,8 @@ def backtest_portfolio(
     lag: int,
 ) -> PortfolioBacktestResult:
     """
-    Create returns from a signal and a target.
+    Create a vectorized backtest from a portfolio of weights and the underlying returns.
+
     Parameters:
         weights: pd.DataFrame
             The weights of the portfolio.

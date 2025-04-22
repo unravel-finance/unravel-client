@@ -15,7 +15,7 @@ def scale_to_target_volatility(
     annualization_period: int,
 ) -> VolScaledSignal:
     """
-    Scale a signal to a target volatility.
+    Create a signal to scale returns to a target (annualized) volatility.
     Parameters:
         target_volatility: float
             The annualized target volatility.
