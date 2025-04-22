@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from risklab.backtest import backtest_signal
 from risklab.returns import rebase, to_prices
-from risklab.signal import scale_to_target_volatility
+from risklab.volatility_targeting import scale_to_target_volatility
 from risklab.stats import sharpe, to_drawdown_series
 
 sp500 = yf.Ticker("SPY")
@@ -54,12 +54,13 @@ plt.show()
 
 # %%
 vol_signal = scale_to_target_volatility(
-    target_volatility=0.16 / np.sqrt(252),
+    target_volatility=0.16,
     rolling_window=30,
     returns=sp500_data["Close"].pct_change(),
     upper_limit=2.0,
-    delay=0,
+    lag=0,
     fill_initial_period_with_mean=False,
+    annualization_period=252,
 )
 results = backtest_signal(
     signal=vol_signal,
@@ -83,18 +84,14 @@ plt.show()
 
 # %% print sharpe ratio, volatility, max drawdown for both results and sp500_data as a table
 
-# Calculate metrics for risk managed strategy
 risk_managed_sharpe = round(sharpe(results.returns, 252), 2)
 risk_managed_volatility = round(results.returns.std() * np.sqrt(252), 2)
 risk_managed_max_dd = round(to_drawdown_series(results.returns).min(), 2)
-
-# Calculate metrics for SP500
 sp500_returns = sp500_data["Close"].pct_change()
 sp500_sharpe = round(sharpe(sp500_returns, 252), 2)
 sp500_volatility = round(sp500_returns.std() * np.sqrt(252), 2)
 sp500_max_dd = round(to_drawdown_series(sp500_returns).min(), 2)
 
-# Create and display table
 metrics_table = [
     ["Metric", "Risk Managed Strategy", "SP500"],
     ["Sharpe Ratio", risk_managed_sharpe, sp500_sharpe],

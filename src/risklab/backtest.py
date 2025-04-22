@@ -23,7 +23,19 @@ def backtest_signal(
     lag: int,
 ) -> BacktestResult:
     """
-    Create returns from a signal and a target.
+    Create a vectorized backtest from a signal and the underlying returns.
+
+    Parameters:
+        signal: Signal
+            The signal to backtest.
+        underlying: Returns
+            The underlying returns.
+        transaction_cost: float
+            The transaction cost.
+        lag: int
+            Additional lag to apply to the signal. If you want a 1 day delay between signal generation and execution, specify 1.
+    Returns:
+        BacktestResult
     """
     assert isinstance(signal, pd.Series), "Signal must be a Series"
     signal = signal.ffill()
@@ -43,7 +55,6 @@ def backtest_signal(
 class PortfolioBacktestResult:
     portfolio_returns: Returns
     component_returns: ReturnsDataFrame
-    lag: int
 
     def split(self, start_date, end_date) -> PortfolioBacktestResult:
         return PortfolioBacktestResult(
@@ -61,6 +72,17 @@ def backtest_portfolio(
 ) -> PortfolioBacktestResult:
     """
     Create returns from a signal and a target.
+    Parameters:
+        weights: pd.DataFrame
+            The weights of the portfolio.
+        underlying: ReturnsDataFrame
+            The underlying returns.
+        transaction_cost: float
+            The transaction cost.
+        lag: int
+            Additional lag to apply to the signal.
+    Returns:
+        PortfolioBacktestResult
     """
     assert weights.columns.equals(underlying.columns), "Columns must match"
     underlying = underlying.loc[weights.index]
@@ -74,5 +96,4 @@ def backtest_portfolio(
     return PortfolioBacktestResult(
         portfolio_returns=portfolio_returns,
         component_returns=returns,
-        lag=lag,
     )
