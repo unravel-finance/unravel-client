@@ -57,9 +57,7 @@ def backtest_portfolio(
     weights: pd.DataFrame,
     underlying: ReturnsDataFrame,
     transaction_cost: float,
-    high_watermark_performance_fee: float | None,
     lag: int,
-    fee_accounting_period: str = "ME",
 ) -> PortfolioBacktestResult:
     """
     Create returns from a signal and a target.
@@ -73,11 +71,8 @@ def backtest_portfolio(
     returns = (underlying * weights.shift(1 + lag)) - costs
     portfolio_returns = returns.sum(axis="columns")
 
-
     return PortfolioBacktestResult(
         portfolio_returns=portfolio_returns,
         component_returns=returns,
-        portfolio_returns_after_fees=portfolio_returns - fees,
         lag=lag,
     )
-
