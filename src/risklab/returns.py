@@ -46,3 +46,8 @@ def to_prices(returns: pd.Series, base=1.0) -> pd.Series:
     """Arithcmetic returns to price series"""
     returns = returns.copy().fillna(0).replace([np.inf, -np.inf], float("NaN"))
     return base + base * compsum(returns)
+
+
+def rebase(prices: pd.Series) -> pd.Series:
+    """Rebase a price series to 1.0"""
+    return prices / prices.iloc[0]
