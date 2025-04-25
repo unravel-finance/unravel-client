@@ -55,6 +55,18 @@ def vectorized_backtest(price_series: pd.Series, signal_series: pd.Series, trans
     return results
 
 def get_risk_signal_from_unravel(ticker: str, series: str, start_date: str, end_date: str) -> pd.Series:   
+    """
+    Fetch normalized risk signal data from Unravel Markets API.
+    
+    Args:
+        ticker (str): The cryptocurrency ticker symbol (e.g., 'BTC')
+        series (str): The risk factor series to retrieve (e.g., 'meta_risk')
+        start_date (str): Start date in 'YYYY-MM-DD' format
+        end_date (str): End date in 'YYYY-MM-DD' format
+        
+    Returns:
+        pd.Series: Time series of the risk signal with datetime index
+    """
     url = 'https://unravel.markets/api/v1/normalized-series'
     params={'ticker': ticker, 'series': series, 'start_date': start_date, 'end_date': end_date}
     headers = {
@@ -68,6 +80,17 @@ def get_risk_signal_from_unravel(ticker: str, series: str, start_date: str, end_
 
 
 def get_price_series_from_binance(ticker: str, start_date: str, end_date: str) -> pd.Series:
+    """
+    Fetch historical price data from Binance API.
+    
+    Args:
+        ticker (str): The cryptocurrency ticker symbol (e.g., 'BTC')
+        start_date (str): Start date in 'YYYY-MM-DD' format
+        end_date (str): End date in 'YYYY-MM-DD' format
+        
+    Returns:
+        pd.Series: Time series of closing prices with datetime index
+    """
     url = f'https://api.binance.com/api/v3/klines'
     start_timestamp = int(datetime.strptime(start_date, '%Y-%m-%d').timestamp() * 1000)
     end_timestamp = int(datetime.strptime(end_date, '%Y-%m-%d').timestamp() * 1000)
@@ -81,6 +104,18 @@ def get_price_series_from_binance(ticker: str, start_date: str, end_date: str) -
     return price
 
 def get_signal_with_backtest(ticker: str, risk_factor: str, start_date: str, end_date: str) -> pd.DataFrame:
+    """
+    Fetch risk signal and price data, then perform a backtest.
+    
+    Args:
+        ticker (str): The cryptocurrency ticker symbol (e.g., 'BTC')
+        risk_factor (str): The risk factor to use as trading signal (e.g., 'meta_risk')
+        start_date (str): Start date in 'YYYY-MM-DD' format
+        end_date (str): End date in 'YYYY-MM-DD' format
+        
+    Returns:
+        pd.DataFrame: Backtest results including positions, returns, and performance metrics
+    """
     risk_factor_signal = get_risk_signal_from_unravel(ticker, risk_factor, start_date, end_date)
     price = get_price_series_from_binance(ticker, start_date, end_date)
     price = price.reindex(risk_factor_signal.index)
