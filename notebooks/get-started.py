@@ -2,7 +2,7 @@
 import os
 import requests
 import pandas as pd
-import datetime 
+import datetime
 
 import matplotlib.pyplot as plt
 
@@ -92,8 +92,8 @@ def get_price_series_from_binance(ticker: str, start_date: str, end_date: str) -
         pd.Series: Time series of closing prices with datetime index
     """
     url = "https://api.binance.com/api/v3/klines"
-    start_timestamp = int(datetime.datetime.strptime(start_date, "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc).timestamp() * 1000)
-    end_timestamp = int(datetime.datetime.strptime(end_date, "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc).timestamp() * 1000)
+    start_timestamp = int(datetime.datetime.strptime(start_date, "%Y-%m-%d").replace(tzinfo=datetime.UTC).timestamp() * 1000)
+    end_timestamp = int(datetime.datetime.strptime(end_date, "%Y-%m-%d").replace(tzinfo=datetime.UTC).timestamp() * 1000)
 
     params = {"symbol": ticker+"USDT", "interval": "1d", "startTime": start_timestamp, "endTime": end_timestamp}
     response = requests.get(url, params=params)
@@ -120,31 +120,31 @@ def get_signal_with_backtest(ticker: str, risk_factor: str, start_date: str, end
     price = price.reindex(risk_factor_signal.index)
     return vectorized_backtest(price, risk_factor_signal)
 
-def plot_backtest_results(results: pd.DataFrame, ticker:str, risk_factor:str, figsize=(12, 10),):
+def plot_backtest_results(results: pd.DataFrame, ticker:str, risk_factor:str, figsize=(12, 10)):
     """
     Plot backtest results with performance chart and signal.
-    
+
     Args:
-        results (pd.DataFrame): DataFrame containing backtest results with 
+        results (pd.DataFrame): DataFrame containing backtest results with
                                'cumulative_returns', 'price_rebased', and 'signal' columns
         figsize (tuple): Figure size as (width, height) in inches
     """
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [2, 1]})
-    
-    ax1.plot(results.index, results['cumulative_returns'], label='Strategy Returns')
-    ax1.plot(results.index, results['price_rebased'], label=f'Benchmark ({ticker})')
-    ax1.set_title('Performance with Risk Signal', fontsize=14)
-    ax1.legend()
-    ax1.grid(True, axis='y', linestyle='--')
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=figsize, gridspec_kw={"height_ratios": [2, 1]})
 
-    ax2.plot(results.index, results['signal'], label='Signal', color='orange')
-    ax2.set_title(f'Risk Signal {risk_factor}')
+    ax1.plot(results.index, results["cumulative_returns"], label="Strategy Returns")
+    ax1.plot(results.index, results["price_rebased"], label=f"Benchmark ({ticker})")
+    ax1.set_title("Performance with Risk Signal", fontsize=14)
+    ax1.legend()
+    ax1.grid(True, axis="y", linestyle="--")
+
+    ax2.plot(results.index, results["signal"], label="Signal", color="orange")
+    ax2.set_title(f"Risk Signal {risk_factor}")
     ax2.legend()
-    ax2.grid(True, axis='y', linestyle='--')
+    ax2.grid(True, axis="y", linestyle="--")
 
     plt.tight_layout()
     plt.show()
-    
+
     return fig, (ax1, ax2)
 
 
