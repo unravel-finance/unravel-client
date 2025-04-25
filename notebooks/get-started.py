@@ -70,7 +70,7 @@ def get_risk_signal_from_unravel(ticker: str, series: str, start_date: str, end_
     url = 'https://unravel.markets/api/v1/normalized-series'
     params={'ticker': ticker, 'series': series, 'start_date': start_date, 'end_date': end_date}
     headers = {
-        'X-API-KEY': os.environ.get('UNRAVEL_API_KEY')  # Get API key from environment variables
+        'X-API-KEY': os.environ.get('UNRAVEL_API_KEY')  
     }
     response = requests.get(url, headers=headers, params=params)
     assert response.status_code == 200, f"Error fetching exogenous series for {ticker} and {series}, response: {response.json()}"
