@@ -2,7 +2,8 @@
 import os
 import requests
 import pandas as pd
-from datetime import  datetime
+import datetime 
+
 import matplotlib.pyplot as plt
 
 
@@ -49,7 +50,7 @@ def vectorized_backtest(price_series: pd.Series, signal_series: pd.Series, trans
         "transaction_costs": transaction_costs,
         "net_returns": net_returns,
         "cumulative_returns": cumulative_returns,
-        "price_rebased": (price_series / price_series.iloc[0]).rename(f"Benchmark {price_series.name}")
+        "price_rebased": (price_series / price_series.iloc[0])
     })
 
 
@@ -91,8 +92,8 @@ def get_price_series_from_binance(ticker: str, start_date: str, end_date: str) -
         pd.Series: Time series of closing prices with datetime index
     """
     url = "https://api.binance.com/api/v3/klines"
-    start_timestamp = int(datetime.strptime(start_date, "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc).timestamp() * 1000)
-    end_timestamp = int(datetime.strptime(end_date, "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc).timestamp() * 1000)
+    start_timestamp = int(datetime.datetime.strptime(start_date, "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc).timestamp() * 1000)
+    end_timestamp = int(datetime.datetime.strptime(end_date, "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc).timestamp() * 1000)
 
     params = {"symbol": ticker+"USDT", "interval": "1d", "startTime": start_timestamp, "endTime": end_timestamp}
     response = requests.get(url, params=params)
@@ -120,11 +121,11 @@ def get_signal_with_backtest(ticker: str, risk_factor: str, start_date: str, end
     return vectorized_backtest(price, risk_factor_signal)
 
 
-results = get_signal_with_backtest("BTC", "meta_risk", "2023-01-01", datetime.now().strftime("%Y-%m-%d"))
+results = get_signal_with_backtest("BTC", "meta_risk", "2023-01-01", datetime.datetime.now().strftime("%Y-%m-%d"))
 
 
 fig, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
 results["cumulative_returns"].rename("Strategy Returns").plot(ax=axes[0])
-results["price"].rename("BTC Price").plot(ax=axes[0], secondary_y=True, color="red")
+results["price_rebased"].rename("BTC Price").plot(ax=axes[0], secondary_y=True, color="red")
 results["signal"].rename("Risk Signal").plot(ax=axes[1], color="green")
 
