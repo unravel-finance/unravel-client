@@ -120,12 +120,39 @@ def get_signal_with_backtest(ticker: str, risk_factor: str, start_date: str, end
     price = price.reindex(risk_factor_signal.index)
     return vectorized_backtest(price, risk_factor_signal)
 
+def plot_backtest_results(results: pd.DataFrame, ticker:str, risk_factor:str, figsize=(12, 10),):
+    """
+    Plot backtest results with performance chart and signal.
+    
+    Args:
+        results (pd.DataFrame): DataFrame containing backtest results with 
+                               'cumulative_returns', 'price_rebased', and 'signal' columns
+        figsize (tuple): Figure size as (width, height) in inches
+    """
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=figsize, gridspec_kw={'height_ratios': [2, 1]})
+    
+    ax1.plot(results.index, results['cumulative_returns'], label='Strategy Returns')
+    ax1.plot(results.index, results['price_rebased'], label=f'Benchmark ({ticker})')
+    ax1.set_title('Performance with Risk Signal', fontsize=14)
+    ax1.legend()
+    ax1.grid(True, axis='y', linestyle='--')
 
-results = get_signal_with_backtest("BTC", "meta_risk", "2023-01-01", datetime.datetime.now().strftime("%Y-%m-%d"))
+    ax2.plot(results.index, results['signal'], label='Signal', color='orange')
+    ax2.set_title(f'Risk Signal {risk_factor}')
+    ax2.legend()
+    ax2.grid(True, axis='y', linestyle='--')
+
+    plt.tight_layout()
+    plt.show()
+    
+    return fig, (ax1, ax2)
 
 
-fig, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
-results["cumulative_returns"].rename("Strategy Returns").plot(ax=axes[0])
-results["price_rebased"].rename("BTC Price").plot(ax=axes[0], secondary_y=True, color="red")
-results["signal"].rename("Risk Signal").plot(ax=axes[1], color="green")
+risk_factor = "meta_risk"
+ticker= "BTC"
+start_date = "2023-01-01"
+end_date = datetime.datetime.now().strftime("%Y-%m-%d")
+
+results = get_signal_with_backtest(ticker, risk_factor, start_date, end_date)
+plot_backtest_results(results, ticker, risk_factor)
 
