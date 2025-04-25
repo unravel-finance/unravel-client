@@ -1,0 +1,98 @@
+#%%
+import os
+import requests
+import pandas as pd
+from datetime import  datetime
+import matplotlib.pyplot as plt
+
+
+def vectorized_backtest(price_series: pd.Series, signal_series: pd.Series, transaction_cost: float = 0.0005) -> pd.DataFrame:
+    """
+    Perform a vectorized backtest on price and signal series.
+    
+    Args:
+        price_series (pd.Series): Price series of the asset
+        signal_series (pd.Series): Signal series between -1 and 1
+        transaction_cost (float): Transaction cost as a decimal (e.g., 0.001 for 0.1%)
+    
+    Returns:
+        pd.DataFrame: DataFrame containing positions, returns, and cumulative returns
+    """
+    # Forward fill missing values
+    price_series = price_series.ffill()
+    signal_series = signal_series.ffill()
+    
+    # Calculate position changes (when signal changes)
+    position_changes = signal_series.diff()
+    
+    # Calculate returns including transaction costs
+    returns = price_series.pct_change()
+    position_returns = signal_series.shift(1) * returns  # Shift to avoid look-ahead bias
+    
+    # Apply transaction costs only when position changes
+    transaction_costs = abs(position_changes) * transaction_cost
+    
+    # Calculate net returns
+    net_returns = position_returns - transaction_costs
+    
+    # Calculate cumulative returns
+    cumulative_returns = (1 + net_returns).cumprod()
+    
+    # Create results DataFrame
+    results = pd.DataFrame({
+        'price': price_series,
+        'signal': signal_series,
+        'position': signal_series,
+        'position_changes': position_changes,
+        'returns': returns,
+        'position_returns': position_returns,
+        'transaction_costs': transaction_costs,
+        'net_returns': net_returns,
+        'cumulative_returns': cumulative_returns,
+        'price_rebased': (price_series / price_series.iloc[0]).rename(f'Benchmark {price_series.name}')
+    })
+    
+    return results
+
+def get_risk_signal_from_unravel(ticker: str, series: str, start_date: str, end_date: str) -> pd.Series:   
+    url = 'https://unravel.markets/api/v1/normalized-series'
+    params={'ticker': ticker, 'series': series, 'start_date': start_date, 'end_date': end_date}
+    headers = {
+        'X-API-KEY': os.environ.get('UNRAVEL_API_KEY')  # Get API key from environment variables
+    }
+    response = requests.get(url, headers=headers, params=params)
+    assert response.status_code == 200, f"Error fetching exogenous series for {ticker} and {series}, response: {response.json()}"
+
+    response = response.json()
+    return pd.Series(response['data'], index=pd.to_datetime(response['index'])).rename(ticker)
+
+
+def get_price_series_from_binance(ticker: str, start_date: str, end_date: str) -> pd.Series:
+    url = f'https://api.binance.com/api/v3/klines'
+    start_timestamp = int(datetime.strptime(start_date, '%Y-%m-%d').timestamp() * 1000)
+    end_timestamp = int(datetime.strptime(end_date, '%Y-%m-%d').timestamp() * 1000)
+    
+    params = {'symbol': ticker+'USDT', 'interval': '1d', 'startTime': start_timestamp, 'endTime': end_timestamp}
+    response = requests.get(url, params=params)
+    assert response.status_code == 200, f"Error fetching price data for {ticker}, response: {response.json()}"
+    
+    response = response.json()
+    price = pd.Series([float(x[4]) for x in response], index=pd.to_datetime([x[0] for x in response], unit='ms')).rename(ticker)
+    return price
+
+def get_signal_with_backtest(ticker: str, risk_factor: str, start_date: str, end_date: str) -> pd.DataFrame:
+    risk_factor_signal = get_risk_signal_from_unravel(ticker, risk_factor, start_date, end_date)
+    price = get_price_series_from_binance(ticker, start_date, end_date)
+    price = price.reindex(risk_factor_signal.index)
+    results = vectorized_backtest(price, risk_factor_signal)
+    return results
+
+
+results = get_signal_with_backtest('BTC', 'meta_risk', '2023-01-01', datetime.now().strftime('%Y-%m-%d'))
+
+
+fig, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
+results['cumulative_returns'].rename('Strategy Returns').plot(ax=axes[0])
+results['price'].rename('BTC Price').plot(ax=axes[0], secondary_y=True, color='red')
+results['signal'].rename('Risk Signal').plot(ax=axes[1], color='green')
+
