@@ -60,7 +60,6 @@ class PortfolioBacktestResult:
         return PortfolioBacktestResult(
             portfolio_returns=self.portfolio_returns[start_date:end_date],
             component_returns=self.component_returns[start_date:end_date],
-            lag=self.lag,
         )
 
 
