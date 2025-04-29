@@ -106,7 +106,7 @@ def get_price_series(ticker: str, start_date: str, end_date: str) -> pd.Series:
     Returns:
         pd.Series: Time series of the risk signal with datetime index
     """
-    url = "https://unravel.finance/api/v1/price-series"
+    url = "https://unravel.finance/api/v1/price"
     params = {"ticker": ticker, "start_date": start_date, "end_date": end_date}
     headers = {"X-API-KEY": os.environ.get("UNRAVEL_API_KEY")}
     response = requests.get(url, headers=headers, params=params)
@@ -118,29 +118,6 @@ def get_price_series(ticker: str, start_date: str, end_date: str) -> pd.Series:
     return pd.Series(response["data"], index=pd.to_datetime(response["index"])).rename(
         ticker
     )
-
-
-def get_signal_with_backtest(
-    ticker: str, risk_factor: str, start_date: str, end_date: str
-) -> pd.DataFrame:
-    """
-    Fetch risk signal and price data, then perform a backtest.
-
-    Args:
-        ticker (str): The cryptocurrency ticker symbol (e.g., 'BTC')
-        risk_factor (str): The risk factor to use as trading signal (e.g., 'meta_risk')
-        start_date (str): Start date in 'YYYY-MM-DD' format
-        end_date (str): End date in 'YYYY-MM-DD' format
-
-    Returns:
-        pd.DataFrame: Backtest results including positions, returns, and performance metrics
-    """
-    risk_factor_signal = get_normalized_series(
-        ticker, risk_factor, start_date, end_date
-    )
-    price = get_price_series(ticker, start_date, end_date)
-    price = price.reindex(risk_factor_signal.index)
-    return vectorized_backtest(price, risk_factor_signal)
 
 
 def plot_backtest_results(
@@ -180,7 +157,11 @@ ticker = "BTC"
 start_date = "2023-01-01"
 end_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
-results = get_signal_with_backtest(ticker, risk_factor, start_date, end_date)
+risk_factor_signal = get_normalized_series(ticker, risk_factor, start_date, end_date)
+price = get_price_series(ticker, start_date, end_date)
+price = price.reindex(risk_factor_signal.index)
+results = vectorized_backtest(price, risk_factor_signal)
+
 plot_backtest_results(results, ticker, risk_factor)
 
 # %%
