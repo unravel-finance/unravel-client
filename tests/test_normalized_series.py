@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 import pandas as pd
 import pytest
+import requests
 from unravel_client import get_normalized_series
 
 
@@ -32,7 +33,7 @@ def test_get_normalized_series_success(api_key):
 
 def test_invalid_ticker_error(api_key):
     """Test error handling for invalid ticker."""
-    with pytest.raises(AssertionError):
+    with pytest.raises(requests.HTTPError):
         get_normalized_series(
             ticker="INVALID_TICKER",
             series="meta_risk",

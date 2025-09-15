@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 import pandas as pd
 import pytest
+import requests
 from unravel_client import get_portfolio_historical_weights
 
 
@@ -69,7 +70,7 @@ def test_date_range_handling(api_key, test_portfolio):
 
 def test_invalid_portfolio_error(api_key):
     """Test error handling for invalid portfolio."""
-    with pytest.raises(AssertionError):
+    with pytest.raises(requests.HTTPError):
         get_portfolio_historical_weights(
             portfolio="invalid-portfolio-id",
             API_KEY=api_key,
@@ -78,7 +79,7 @@ def test_invalid_portfolio_error(api_key):
 
 def test_invalid_api_key_error():
     """Test error handling for invalid API key."""
-    with pytest.raises(AssertionError):
+    with pytest.raises(requests.HTTPError):
         get_portfolio_historical_weights(
             portfolio="test-portfolio",
             API_KEY="invalid-api-key",
