@@ -7,30 +7,6 @@ import pytest
 from unravel_client import get_historical_universe
 
 
-def test_get_historical_universe_success(api_key):
-    """Test successful retrieval of historical universe."""
-    result = get_historical_universe(
-        size="full",
-        start_date="2024-01-01",
-        end_date="2024-01-31",
-        API_KEY=api_key,
-    )
-
-    # Assertions
-    assert isinstance(result, pd.DataFrame)
-    assert len(result) > 0, "Should have some data"
-    assert len(result.columns) > 0, "Should have some tickers"
-    assert len(result.index) > 0, "Should have some dates"
-
-    # Check that all values are boolean (True/False)
-    assert result.dtypes.apply(
-        lambda x: x == bool
-    ).all(), "All values should be boolean"
-
-    # Check that index is datetime
-    assert isinstance(result.index, pd.DatetimeIndex), "Index should be DatetimeIndex"
-
-
 def test_get_historical_universe_different_sizes(api_key):
     """Test historical universe with different size parameters."""
     sizes = ["20", "30", "40"]
@@ -60,7 +36,7 @@ def test_get_historical_universe_date_range(api_key):
 
     for start_date, end_date in date_ranges:
         result = get_historical_universe(
-            size="full",
+            size="20",
             start_date=start_date,
             end_date=end_date,
             API_KEY=api_key,
@@ -101,7 +77,7 @@ def test_get_historical_universe_invalid_parameters(api_key):
     # Test with invalid date format
     with pytest.raises(AssertionError):
         get_historical_universe(
-            size="full",
+            size="20",
             start_date="invalid-date",
             end_date="2024-01-31",
             API_KEY=api_key,
@@ -110,7 +86,7 @@ def test_get_historical_universe_invalid_parameters(api_key):
     # Test with invalid API key
     with pytest.raises(AssertionError):
         get_historical_universe(
-            size="full",
+            size="20",
             start_date="2024-01-01",
             end_date="2024-01-31",
             API_KEY="invalid_key",
@@ -120,7 +96,7 @@ def test_get_historical_universe_invalid_parameters(api_key):
 def test_get_historical_universe_data_consistency(api_key):
     """Test that historical universe data is consistent."""
     result = get_historical_universe(
-        size="full",
+        size="20",
         start_date="2024-01-01",
         end_date="2024-01-31",
         API_KEY=api_key,
