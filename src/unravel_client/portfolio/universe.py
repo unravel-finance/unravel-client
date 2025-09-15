@@ -25,9 +25,7 @@ def get_historical_universe(
 
     headers = {"X-API-KEY": API_KEY}
     response = requests.get(url, headers=headers, params=params)
-    assert (
-        response.status_code == 200
-    ), f"Error fetching rolling universe for {size}, response: {response.json()}"
+    response.raise_for_status()
 
     response = response.json()
     return pd.DataFrame(

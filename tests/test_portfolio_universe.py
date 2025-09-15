@@ -4,6 +4,7 @@ Tests for universe API endpoint.
 
 import pandas as pd
 import pytest
+import requests
 from unravel_client import get_historical_universe
 
 
@@ -66,7 +67,7 @@ def test_get_historical_universe_date_range(api_key):
 def test_get_historical_universe_invalid_parameters(api_key):
     """Test historical universe with invalid parameters."""
     # Test with invalid size
-    with pytest.raises(AssertionError):
+    with pytest.raises(requests.HTTPError):
         get_historical_universe(
             size="invalid_size",
             start_date="2024-01-01",
@@ -75,7 +76,7 @@ def test_get_historical_universe_invalid_parameters(api_key):
         )
 
     # Test with invalid date format
-    with pytest.raises(AssertionError):
+    with pytest.raises(requests.HTTPError):
         get_historical_universe(
             size="20",
             start_date="invalid-date",
@@ -84,7 +85,7 @@ def test_get_historical_universe_invalid_parameters(api_key):
         )
 
     # Test with invalid API key
-    with pytest.raises(AssertionError):
+    with pytest.raises(requests.HTTPError):
         get_historical_universe(
             size="20",
             start_date="2024-01-01",
