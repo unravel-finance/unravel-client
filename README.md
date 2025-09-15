@@ -65,6 +65,14 @@ factors = unravel_client.get_portfolio_factors_historical(
     tickers=["BTC", "ETH"],
     API_KEY=API_KEY
 )
+
+# Get historical universe
+universe = unravel_client.get_historical_universe(
+    size="full",
+    start_date="2024-01-01",
+    end_date="2024-12-31",
+    API_KEY=API_KEY
+)
 ```
 
 ## API Reference
@@ -133,6 +141,19 @@ Fetch historical factors for a portfolio from the Unravel API.
 - `API_KEY` (str): Your API key
 
 **Returns:** `pandas.DataFrame` with historical factor data
+
+#### `get_historical_universe(size, start_date, end_date, API_KEY)`
+
+Fetch the historical universe from the Unravel API.
+
+**Parameters:**
+
+- `size` (str): The universe size to use for the request. Pass in 'full' to get all available tickers for the portfolio
+- `start_date` (str): The start date to use for the request in 'YYYY-MM-DD' format
+- `end_date` (str): The end date to use for the request in 'YYYY-MM-DD' format
+- `API_KEY` (str): Your API key
+
+**Returns:** `pandas.DataFrame` with tickers in the portfolio [True and False]
 
 ### Risk Signal Functions
 
