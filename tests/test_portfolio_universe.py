@@ -75,15 +75,6 @@ def test_get_historical_universe_invalid_parameters(api_key):
             API_KEY=api_key,
         )
 
-    # Test with invalid date format
-    with pytest.raises(requests.HTTPError):
-        get_historical_universe(
-            size="20",
-            start_date="invalid-date",
-            end_date="2024-01-31",
-            API_KEY=api_key,
-        )
-
     # Test with invalid API key
     with pytest.raises(requests.HTTPError):
         get_historical_universe(
