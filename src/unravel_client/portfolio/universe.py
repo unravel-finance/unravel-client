@@ -2,8 +2,10 @@ import pandas as pd
 import requests
 
 from ..constants import BASEAPI
+from ..decorators import handle_api_errors
 
 
+@handle_api_errors
 def get_historical_universe(
     size: str, start_date: str, end_date: str, API_KEY: str
 ) -> pd.DataFrame:

@@ -2,8 +2,10 @@ import pandas as pd
 import requests
 
 from ..constants import BASEAPI
+from ..decorators import handle_api_errors
 
 
+@handle_api_errors
 def get_portfolio_factors_historical(
     portfolioId: str,
     tickers: list[str],
