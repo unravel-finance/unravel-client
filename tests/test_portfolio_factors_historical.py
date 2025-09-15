@@ -11,14 +11,14 @@ def test_get_portfolio_factors_historical_success(
     """Test successful retrieval of historical factors."""
     # First get some tickers to use
     tickers = get_tickers(
-        portfolioId=test_portfolio_base,
+        id=test_portfolio_base,
         API_KEY=api_key,
         universe_size=20,
     )
 
     if len(tickers) > 0:
         result = get_portfolio_factors_historical(
-            portfolioId=test_portfolio,
+            id=test_portfolio,
             tickers=tickers[:3],
             API_KEY=api_key,
         )

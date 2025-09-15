@@ -1,44 +1,37 @@
 import pandas as pd
 import requests
 
-from ..constants import BASEAPI
-from ..decorators import handle_api_errors
+from .constants import BASEAPI
+from .decorators import handle_api_errors
 
 
 @handle_api_errors
-def get_normalized_series(
+def get_price(
     ticker: str,
-    series: str,
     API_KEY: str,
     start_date: str | None = None,
     end_date: str | None = None,
-    smoothing: str | None = None,
 ) -> pd.Series:
     """
-    Fetch normalized directional factor or risk signal data from the Unravel API.
+    Fetch closing prices for a ticker from the Unravel API.
+
+    Note: This endpoint is deprecated and will only be used for technical integrations.
 
     Args:
         ticker (str): Ticker symbol (e.g., BTC, ETH)
-        series (str): Series to retrieve (e.g., exchange_outflow, sentiment_aggregate)
         API_KEY (str): The API key to use for the request
         start_date (str | None): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
         end_date (str | None): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
-        smoothing (str | None): Smoothing window for the data. Valid values are "default", "0", "7", "30". Default is "default".
     Returns:
-        pd.Series: Time series of the normalized directional factor with datetime index
+        pd.Series: Time series of closing prices with datetime index
     """
-    url = f"{BASEAPI}/normalized-series"
-    params = {
-        "ticker": ticker,
-        "series": series,
-    }
+    url = f"{BASEAPI}/price"
+    params = {"ticker": ticker}
 
     if start_date is not None:
         params["start_date"] = start_date
     if end_date is not None:
         params["end_date"] = end_date
-    if smoothing is not None:
-        params["smoothing"] = smoothing
 
     headers = {"X-API-KEY": API_KEY}
     response = requests.get(url, headers=headers, params=params)

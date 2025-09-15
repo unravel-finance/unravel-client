@@ -47,23 +47,37 @@ risk_signal = unravel_client.get_normalized_series(
 
 # Get portfolio returns
 returns = unravel_client.get_portfolio_returns(
-    portfolioId="your-portfolio-id",
+    portfolio="your-portfolio-id",
     API_KEY=API_KEY,
     start_date="2024-01-01"
 )
 
 # Get portfolio tickers
 tickers = unravel_client.get_tickers(
-    portfolioId="your-portfolio-id",
+    id="momentum",  # Portfolio factor identifier without universe specifier
     API_KEY=API_KEY,
     universe_size="full"
 )
 
 # Get historical factors
 factors = unravel_client.get_portfolio_factors_historical(
-    portfolioId="your-portfolio-id",
+    id="momentum",  # Portfolio factor identifier without universe specifier
     tickers=["BTC", "ETH"],
     API_KEY=API_KEY
+)
+
+# Get live factors (latest factor data)
+live_factors = unravel_client.get_portfolio_factors_live(
+    id="momentum",
+    tickers=["BTC", "ETH"],
+    API_KEY=API_KEY
+)
+
+# Get price data (deprecated endpoint)
+price = unravel_client.get_price(
+    ticker="BTC",
+    API_KEY=API_KEY,
+    start_date="2024-01-01"
 )
 
 # Get historical universe
@@ -79,79 +93,101 @@ universe = unravel_client.get_historical_universe(
 
 ### Portfolio Functions
 
-#### `get_portfolio_historical_weights(portfolio, API_KEY, start_date=None, end_date=None, smoothing=None)`
+#### `get_portfolio_historical_weights(portfolio, API_KEY, start_date=None, end_date=None, smoothing=None, exchange=None)`
 
 Fetch historical portfolio weights from the Unravel API.
 
 **Parameters:**
 
-- `portfolio` (str): The portfolio ID
+- `portfolio` (str): Portfolio Identifier (eg. momentum.20)
 - `API_KEY` (str): Your API key
-- `start_date` (str, optional): Start date in 'YYYY-MM-DD' format
-- `end_date` (str, optional): End date in 'YYYY-MM-DD' format
-- `smoothing` (str, optional): Smoothing parameter
+- `start_date` (str, optional): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
+- `end_date` (str, optional): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
+- `smoothing` (str, optional): Portfolio smoothing window for the data. Valid values are 0 (no smoothing), 5, 10, 15, 20, or 30 days.
+- `exchange` (str, optional): Exchange constraint for portfolio data. Valid options are: unconstrained (default), binance, okx, hyperliquid.
 
 **Returns:** `pandas.DataFrame` with historical weights
 
-#### `get_live_weights(portfolio, API_KEY)`
+#### `get_live_weights(portfolio, API_KEY, smoothing=None, exchange=None)`
 
 Fetch current portfolio weights from the Unravel API.
 
 **Parameters:**
 
-- `portfolio` (str): The portfolio ID
+- `portfolio` (str): Portfolio Identifier (eg. momentum.20)
 - `API_KEY` (str): Your API key
+- `smoothing` (str, optional): Portfolio smoothing window for the data. Valid values are 0 (no smoothing), 5, 10, 15, 20, or 30 days.
+- `exchange` (str, optional): Exchange constraint for portfolio data. Valid options are: unconstrained (default), binance, okx, hyperliquid.
 
 **Returns:** `pandas.Series` with current weights
 
-#### `get_portfolio_returns(portfolioId, API_KEY, start_date=None, end_date=None, smoothing=None)`
+#### `get_portfolio_returns(portfolio, API_KEY, start_date=None, end_date=None, smoothing=None, exchange=None)`
 
 Fetch portfolio returns from the Unravel API.
 
 **Parameters:**
 
-- `portfolioId` (str): The portfolio ID
+- `portfolio` (str): Portfolio Identifier (eg. momentum.20)
 - `API_KEY` (str): Your API key
-- `start_date` (str, optional): Start date in 'YYYY-MM-DD' format
-- `end_date` (str, optional): End date in 'YYYY-MM-DD' format
-- `smoothing` (str, optional): Smoothing parameter
+- `start_date` (str, optional): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
+- `end_date` (str, optional): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
+- `smoothing` (str, optional): Portfolio smoothing window for the data. Valid values are 0 (no smoothing), 5, 10, 15, 20, or 30 days.
+- `exchange` (str, optional): Exchange constraint for portfolio data. Valid options are: unconstrained (default), binance, okx, hyperliquid.
 
 **Returns:** `pandas.Series` with portfolio returns
 
-#### `get_tickers(portfolioId, API_KEY, universe_size)`
+#### `get_tickers(id, API_KEY, universe_size, exchange=None)`
 
 Fetch the tickers for a portfolio from the Unravel API.
 
 **Parameters:**
 
-- `portfolioId` (str): The portfolio ID
+- `id` (str): Portfolio Factor Identifier without the universe specifier (eg. momentum instead of momentum.20)
 - `API_KEY` (str): Your API key
-- `universe_size` (int | str): Universe size or 'full' for all available tickers
+- `universe_size` (int | str): Universe size for the portfolio (e.g., 20, 30, 40) or 'full' to get all tickers
+- `exchange` (str, optional): Exchange constraint for portfolio data. Valid options are: unconstrained (default), binance, okx, hyperliquid.
 
 **Returns:** `list[str]` with ticker symbols
 
-#### `get_portfolio_factors_historical(portfolioId, tickers, API_KEY)`
+#### `get_portfolio_factors_historical(id, tickers, API_KEY, smoothing=None, start_date=None, end_date=None)`
 
 Fetch historical factors for a portfolio from the Unravel API.
 
 **Parameters:**
 
-- `portfolioId` (str): The portfolio ID
+- `id` (str): Portfolio Factor Identifier without the universe specifier (eg. momentum instead of momentum.20)
 - `tickers` (list[str]): List of tickers in the portfolio
 - `API_KEY` (str): Your API key
+- `smoothing` (str, optional): Portfolio smoothing window for the data. Valid values are 0 (no smoothing), 5, 10, 15, 20, or 30 days.
+- `start_date` (str, optional): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
+- `end_date` (str, optional): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
 
 **Returns:** `pandas.DataFrame` with historical factor data
 
-#### `get_historical_universe(size, start_date, end_date, API_KEY)`
+#### `get_portfolio_factors_live(id, tickers, API_KEY, smoothing=None)`
+
+Fetch the latest factor data for specific tickers within a single factor portfolio.
+
+**Parameters:**
+
+- `id` (str): Portfolio Factor Identifier without the universe specifier (eg. momentum instead of momentum.20)
+- `tickers` (list[str]): List of tickers in the portfolio
+- `API_KEY` (str): Your API key
+- `smoothing` (str, optional): Portfolio smoothing window for the data. Valid values are 0 (no smoothing), 5, 10, 15, 20, or 30 days.
+
+**Returns:** `pandas.Series` with latest factor data
+
+#### `get_historical_universe(size, start_date, end_date, API_KEY, exchange=None)`
 
 Fetch the historical universe from the Unravel API.
 
 **Parameters:**
 
-- `size` (str): The universe size to use for the request. Pass in 'full' to get all available tickers for the portfolio
-- `start_date` (str): The start date to use for the request in 'YYYY-MM-DD' format
-- `end_date` (str): The end date to use for the request in 'YYYY-MM-DD' format
+- `size` (str): Portfolio size - number of assets to include. Must be one of: 20, 30, or 40
+- `start_date` (str): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
+- `end_date` (str): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
 - `API_KEY` (str): Your API key
+- `exchange` (str, optional): Exchange constraint for portfolio data. Valid options are: unconstrained (default), binance, okx, hyperliquid.
 
 **Returns:** `pandas.DataFrame` with tickers in the portfolio [True and False]
 
@@ -163,14 +199,31 @@ Fetch normalized risk signal data from the Unravel API.
 
 **Parameters:**
 
-- `ticker` (str): Cryptocurrency ticker symbol (e.g., 'BTC', 'ETH')
-- `series` (str): Risk factor series (e.g., 'meta_risk')
+- `ticker` (str): Ticker symbol (e.g., BTC, ETH)
+- `series` (str): Series to retrieve (e.g., exchange_outflow, sentiment_aggregate)
 - `API_KEY` (str): Your API key
-- `start_date` (str, optional): Start date in 'YYYY-MM-DD' format
-- `end_date` (str, optional): End date in 'YYYY-MM-DD' format
-- `smoothing` (int, optional): Smoothing window
+- `start_date` (str, optional): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
+- `end_date` (str, optional): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
+- `smoothing` (str, optional): Smoothing window for the data. Valid values are "default", "0", "7", "30". Default is "default".
 
 **Returns:** `pandas.Series` with risk signal data
+
+### Price Functions
+
+#### `get_price(ticker, API_KEY, start_date=None, end_date=None)`
+
+Fetch closing prices for a ticker from the Unravel API.
+
+**Note:** This endpoint is deprecated and will only be used for technical integrations.
+
+**Parameters:**
+
+- `ticker` (str): Ticker symbol (e.g., BTC, ETH)
+- `API_KEY` (str): Your API key
+- `start_date` (str, optional): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
+- `end_date` (str, optional): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
+
+**Returns:** `pandas.Series` with closing prices
 
 ## Requirements
 
