@@ -30,7 +30,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 
 [tool.hatch.version]
-path = "src/unravel-client/__init__.py"
+path = "src/unravel_client/__init__.py"
 
 
 [project.urls]
@@ -88,6 +88,9 @@ run = "pytest tests/ --durations 0 -s"
 
 [tool.isort]
 profile = "black"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/unravel_client"]
 
 [tool.hatch.build.targets.sdist]
 exclude = [

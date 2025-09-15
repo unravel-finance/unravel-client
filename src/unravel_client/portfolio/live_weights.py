@@ -25,8 +25,6 @@ def get_live_weights(portfolio: str, API_KEY: str) -> pd.Series:
     ), f"Error fetching live weights for {portfolio}, response: {response.json()}"
 
     response = response.json()
-    return (
-        pd.Series(response["data"], index=response["columns"])
-        .rename(response["index"])
-        .astype(float)
-    )
+    return pd.Series(response["data"], index=response["columns"]).rename(
+        response["index"]
+    ).astype(float)
