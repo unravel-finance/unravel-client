@@ -37,15 +37,7 @@ def get_normalized_series(
         params["smoothing"] = str(smoothing)
     headers = {"X-API-KEY": API_KEY}
     response = requests.get(url, headers=headers, params=params)
-    if response.status_code != 200:
-        try:
-            error_msg = response.json()
-        except (ValueError, KeyError, TypeError):
-            error_msg = response.text
-        raise AssertionError(
-            f"Error fetching exogenous series for {ticker} and {series}, "
-            f"response: {error_msg}"
-        )
+    response.raise_for_status()
 
     response = response.json()
     return pd.Series(response["data"], index=pd.to_datetime(response["index"])).rename(
