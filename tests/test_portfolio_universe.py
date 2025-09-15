@@ -33,7 +33,7 @@ def test_get_historical_universe_success(api_key):
 
 def test_get_historical_universe_different_sizes(api_key):
     """Test historical universe with different size parameters."""
-    sizes = ["full", "50", "100"]
+    sizes = ["20", "30", "40"]
 
     for size in sizes:
         result = get_historical_universe(
