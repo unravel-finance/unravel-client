@@ -44,12 +44,9 @@ def get_portfolio_returns(
     response.raise_for_status()
 
     response = response.json()
-    # Extract the returns data from the first column (returns)
-    returns_data = [
-        row[0] if row and len(row) > 0 else None for row in response["data"]
-    ]
+
     return pd.Series(
-        returns_data,
+        response["data"],
         index=pd.to_datetime(response["index"]),
         name="returns",
     ).astype(float)
