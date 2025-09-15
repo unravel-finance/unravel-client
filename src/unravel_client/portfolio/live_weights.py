@@ -23,15 +23,17 @@ def get_live_weights(portfolio: str, API_KEY: str) -> pd.Series:
     if response.status_code != 200:
         try:
             error_msg = response.json()
-        except:
+        except (ValueError, KeyError, TypeError):
             error_msg = response.text
         raise AssertionError(
             f"Error fetching live weights for {portfolio}, response: {error_msg}"
         )
 
     response = response.json()
-    return (
-        pd.Series(response["data"], index=response["columns"])
-        .rename(response["index"])
-        .astype(float)
-    )
+    series = pd.Series(response["data"], index=response["columns"])
+    if response.get("index"):
+        series = series.rename(response["index"])
+    # Ensure we have a valid Series before calling astype
+    if isinstance(series, pd.Series):
+        return series.astype(float)
+    return pd.Series(response["data"], index=response["columns"]).astype(float)

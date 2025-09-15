@@ -37,14 +37,15 @@ def get_portfolio_returns(
     if response.status_code != 200:
         try:
             error_msg = response.json()
-        except:
+        except (ValueError, KeyError, TypeError):
             error_msg = response.text
         raise AssertionError(
             f"Error fetching returns for {portfolioId}, response: {error_msg}"
         )
 
     response = response.json()
-    # The returns API returns just the index, we need to create a series with zeros or fetch actual data
+    # The returns API returns just the index, we need to create a series with zeros
+    # or fetch actual data
     # For now, return a series with the index and zero values
     return pd.Series(
         0.0,  # Placeholder values

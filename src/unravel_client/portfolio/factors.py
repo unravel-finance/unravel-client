@@ -26,7 +26,7 @@ def get_portfolio_factors_historical(
     if response.status_code != 200:
         try:
             error_msg = response.json()
-        except:
+        except (ValueError, KeyError, TypeError):
             error_msg = response.text
         raise AssertionError(
             f"Error fetching factors for {portfolioId}, response: {error_msg}"

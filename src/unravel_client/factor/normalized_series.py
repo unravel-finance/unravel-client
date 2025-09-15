@@ -13,17 +13,18 @@ def get_normalized_series(
     smoothing: int | str | None = None,
 ) -> pd.Series:
     """
-    Fetch normalized risk signal data from the Unravel API.
+    Fetch normalized directional factor or risk signal data from the Unravel API.
 
     Args:
         ticker (str): The cryptocurrency ticker symbol (e.g., 'BTC')
-        series (str): The risk factor series to retrieve (e.g., 'meta_risk')
+        series (str): The normalized directional factor series to retrieve (e.g., 'meta_risk')
         API_KEY (str): The API key to use for the request
         start_date (str | None): Start date in 'YYYY-MM-DD' format
         end_date (str | None): End date in 'YYYY-MM-DD' format
-        smoothing (int | None): The smoothing window to use for the risk signal, if None, the default smoothing window will be used.
+        smoothing (int | None): The smoothing window to use for the directional factor,
+            if None, the default smoothing window will be used.
     Returns:
-        pd.Series: Time series of the risk signal with datetime index
+        pd.Series: Time series of the normalized directional factor with datetime index
     """
     url = f"{BASEAPI}/normalized-series"
     params = {
@@ -39,10 +40,11 @@ def get_normalized_series(
     if response.status_code != 200:
         try:
             error_msg = response.json()
-        except:
+        except (ValueError, KeyError, TypeError):
             error_msg = response.text
         raise AssertionError(
-            f"Error fetching exogenous series for {ticker} and {series}, response: {error_msg}"
+            f"Error fetching exogenous series for {ticker} and {series}, "
+            f"response: {error_msg}"
         )
 
     response = response.json()
