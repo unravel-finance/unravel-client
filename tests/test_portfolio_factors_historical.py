@@ -16,13 +16,13 @@ class TestPortfolioFactorsHistorical:
         tickers = get_tickers(
             portfolioId=test_portfolio_base,
             API_KEY=api_key,
-            universe_size=5,  # Get just a few tickers for testing
+            universe_size=20,
         )
 
         if len(tickers) > 0:
             result = get_portfolio_factors_historical(
                 portfolioId=test_portfolio,
-                tickers=tickers[:3],  # Use first 3 tickers
+                tickers=tickers[:3],
                 API_KEY=api_key,
             )
 
