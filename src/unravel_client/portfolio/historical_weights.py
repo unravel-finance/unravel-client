@@ -31,9 +31,14 @@ def get_portfolio_historical_weights(
     }
     headers = {"X-API-KEY": API_KEY}
     response = requests.get(url, headers=headers, params=params)
-    assert (
-        response.status_code == 200
-    ), f"Error fetching portfolio for {portfolio}, response: {response.json()}"
+    if response.status_code != 200:
+        try:
+            error_msg = response.json()
+        except:
+            error_msg = response.text
+        raise AssertionError(
+            f"Error fetching portfolio for {portfolio}, response: {error_msg}"
+        )
 
     response = response.json()
     return pd.DataFrame(

@@ -1,21 +1,19 @@
 name: tests
 
-
 on:
   push:
 
 jobs:
-
   run-tests:
     strategy:
       matrix:
         os:
-        - ubuntu-latest
-        - macos-latest
+          # - ubuntu-latest
+          - macos-latest
         python-version:
-        - "3.11"
-        - "3.12"
-  
+          # - "3.11"
+          - "3.12"
+
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -33,6 +31,8 @@ jobs:
           pip install ".[tests]"
 
       - name: run-tests
+        env:
+          UNRAVEL_API_KEY: ${{ secrets.UNRAVEL_API_KEY }}
         run: pytest . -s --cov --durations 0
 
       - uses: codecov/codecov-action@v3

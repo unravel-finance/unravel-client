@@ -20,11 +20,18 @@ def get_live_weights(portfolio: str, API_KEY: str) -> pd.Series:
     }
     headers = {"X-API-KEY": API_KEY}
     response = requests.get(url, headers=headers, params=params)
-    assert (
-        response.status_code == 200
-    ), f"Error fetching live weights for {portfolio}, response: {response.json()}"
+    if response.status_code != 200:
+        try:
+            error_msg = response.json()
+        except:
+            error_msg = response.text
+        raise AssertionError(
+            f"Error fetching live weights for {portfolio}, response: {error_msg}"
+        )
 
     response = response.json()
-    return pd.Series(response["data"], index=response["columns"]).rename(
-        response["index"]
-    ).astype(float)
+    return (
+        pd.Series(response["data"], index=response["columns"])
+        .rename(response["index"])
+        .astype(float)
+    )

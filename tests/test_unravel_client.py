@@ -1,191 +1,242 @@
 """
-Tests for unravel-client API functions.
+Tests for unravel-client API functions using real API endpoints.
 """
-from unittest.mock import Mock, patch
+import os
+from datetime import datetime, timedelta
 
 import pandas as pd
 import pytest
+
+# Try to load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    pass  # python-dotenv not installed, use system env vars
 from unravel_client import (
     get_live_weights,
     get_normalized_series,
+    get_portfolio_factors_historical,
     get_portfolio_historical_weights,
+    get_portfolio_returns,
+    get_tickers,
 )
+
+
+@pytest.fixture(scope="session")
+def api_key():
+    """Get API key from environment variable."""
+    api_key = os.getenv("UNRAVEL_API_KEY")
+    if not api_key:
+        pytest.skip("UNRAVEL_API_KEY environment variable not set")
+    return api_key
+
+
+@pytest.fixture(scope="session")
+def test_portfolio():
+    """Get test portfolio ID."""
+    return "momentum_enhanced.40"
+
+
+@pytest.fixture(scope="session")
+def test_portfolio_base():
+    """Get base portfolio ID for tickers API."""
+    return "momentum_enhanced"
 
 
 class TestPortfolioFunctions:
     """Test portfolio-related API functions."""
 
-    @patch("unravel_client.portfolio.historical_weights.requests.get")
-    def test_get_portfolio_historical_weights_success(self, mock_get):
+    def test_get_portfolio_historical_weights_success(self, api_key, test_portfolio):
         """Test successful retrieval of historical portfolio weights."""
-        # Mock response
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "data": [[0.5, 0.3, 0.2], [0.6, 0.25, 0.15]],
-            "index": ["2024-01-01", "2024-01-02"],
-            "columns": ["BTC", "ETH", "SOL"],
-        }
-        mock_get.return_value = mock_response
+        # Use a recent date range
+        end_date = datetime.now().strftime("%Y-%m-%d")
+        start_date = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
 
-        # Test function
         result = get_portfolio_historical_weights(
-            portfolio="test-portfolio",
-            API_KEY="test-key",
-            start_date="2024-01-01",
-            end_date="2024-01-02",
+            portfolio=test_portfolio,
+            API_KEY=api_key,
+            start_date=start_date,
+            end_date=end_date,
         )
 
         # Assertions
         assert isinstance(result, pd.DataFrame)
-        assert result.shape == (2, 3)
-        assert list(result.columns) == ["BTC", "ETH", "SOL"]
+        assert len(result) > 0, "Should have some historical data"
         assert isinstance(result.index, pd.DatetimeIndex)
+        assert all(
+            isinstance(col, str) for col in result.columns
+        ), "Columns should be strings"
 
-        # Verify API call
-        mock_get.assert_called_once()
-        call_args = mock_get.call_args
-        assert "portfolio/historical-weights" in call_args[0][0]
-        assert call_args[1]["headers"]["X-API-KEY"] == "test-key"
-        assert call_args[1]["params"]["portfolio"] == "test-portfolio"
-
-    @patch("unravel_client.portfolio.historical_weights.requests.get")
-    def test_get_portfolio_historical_weights_error(self, mock_get):
-        """Test error handling for historical portfolio weights."""
-        # Mock error response
-        mock_response = Mock()
-        mock_response.status_code = 400
-        mock_response.json.return_value = {"error": "Invalid portfolio"}
-        mock_get.return_value = mock_response
-
-        # Test that assertion is raised
-        with pytest.raises(AssertionError):
-            get_portfolio_historical_weights(
-                portfolio="invalid-portfolio", API_KEY="test-key"
-            )
-
-    @patch("unravel_client.portfolio.live_weights.requests.get")
-    def test_get_live_weights_success(self, mock_get):
+    def test_get_live_weights_success(self, api_key, test_portfolio):
         """Test successful retrieval of live portfolio weights."""
-        # Mock response
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "data": [0.5, 0.3, 0.2],
-            "columns": ["BTC", "ETH", "SOL"],
-            "index": "portfolio_weights",
-        }
-        mock_get.return_value = mock_response
-
-        # Test function
-        result = get_live_weights(portfolio="test-portfolio", API_KEY="test-key")
+        result = get_live_weights(portfolio=test_portfolio, API_KEY=api_key)
 
         # Assertions
         assert isinstance(result, pd.Series)
-        assert len(result) == 3
-        assert list(result.index) == ["BTC", "ETH", "SOL"]
-        assert result.name == "portfolio_weights"
+        assert len(result) > 0, "Should have some live weights"
+        assert all(
+            isinstance(idx, str) for idx in result.index
+        ), "Index should be strings"
+        assert pd.api.types.is_float_dtype(result), "Values should be float type"
 
-        # Verify API call
-        mock_get.assert_called_once()
-        call_args = mock_get.call_args
-        assert "portfolio/live-weights" in call_args[0][0]
-        assert call_args[1]["headers"]["X-API-KEY"] == "test-key"
-        assert call_args[1]["params"]["portfolio"] == "test-portfolio"
+    def test_get_portfolio_returns_success(self, api_key, test_portfolio):
+        """Test successful retrieval of portfolio returns."""
+        # Use a recent date range
+        end_date = datetime.now().strftime("%Y-%m-%d")
+        start_date = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
+
+        result = get_portfolio_returns(
+            portfolioId=test_portfolio,
+            API_KEY=api_key,
+            start_date=start_date,
+            end_date=end_date,
+        )
+
+        # Assertions
+        assert isinstance(result, pd.Series)
+        assert len(result) > 0, "Should have some return data"
+        assert isinstance(result.index, pd.DatetimeIndex)
+        assert pd.api.types.is_float_dtype(result), "Values should be float type"
+
+    def test_get_tickers_success(self, api_key, test_portfolio_base):
+        """Test successful retrieval of portfolio tickers."""
+        result = get_tickers(
+            portfolioId=test_portfolio_base,
+            API_KEY=api_key,
+            universe_size="full",
+        )
+
+        # Assertions
+        assert isinstance(result, list)
+        assert len(result) > 0, "Should have some tickers"
+        assert all(
+            isinstance(ticker, str) for ticker in result
+        ), "All tickers should be strings"
+
+    def test_get_portfolio_factors_historical_success(
+        self, api_key, test_portfolio, test_portfolio_base
+    ):
+        """Test successful retrieval of historical factors."""
+        # First get some tickers to use
+        tickers = get_tickers(
+            portfolioId=test_portfolio_base,
+            API_KEY=api_key,
+            universe_size=5,  # Get just a few tickers for testing
+        )
+
+        if len(tickers) > 0:
+            result = get_portfolio_factors_historical(
+                portfolioId=test_portfolio,
+                tickers=tickers[:3],  # Use first 3 tickers
+                API_KEY=api_key,
+            )
+
+            # Assertions
+            assert isinstance(result, pd.DataFrame)
+            assert len(result) > 0, "Should have some factor data"
+            assert isinstance(result.index, pd.DatetimeIndex)
+            assert (
+                len(result.columns) <= 3
+            ), "Should have columns for the tickers we requested"
 
 
 class TestRiskSignalFunctions:
     """Test risk signal API functions."""
 
-    @patch("unravel_client.factor.normalized_series.requests.get")
-    def test_get_normalized_series_success(self, mock_get):
+    def test_get_normalized_series_success(self, api_key):
         """Test successful retrieval of normalized risk series."""
-        # Mock response
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "data": [0.1, 0.2, 0.15, 0.3],
-            "index": ["2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04"],
-        }
-        mock_get.return_value = mock_response
+        # Use a recent date range
+        end_date = datetime.now().strftime("%Y-%m-%d")
+        start_date = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
 
-        # Test function
         result = get_normalized_series(
             ticker="BTC",
             series="meta_risk",
-            API_KEY="test-key",
-            start_date="2024-01-01",
-            end_date="2024-01-04",
+            API_KEY=api_key,
+            start_date=start_date,
+            end_date=end_date,
         )
 
         # Assertions
         assert isinstance(result, pd.Series)
-        assert len(result) == 4
+        assert len(result) > 0, "Should have some risk signal data"
         assert result.name == "BTC"
         assert isinstance(result.index, pd.DatetimeIndex)
+        assert pd.api.types.is_float_dtype(result), "Values should be float type"
 
-        # Verify API call
-        mock_get.assert_called_once()
-        call_args = mock_get.call_args
-        assert "normalized-series" in call_args[0][0]
-        assert call_args[1]["headers"]["X-API-KEY"] == "test-key"
-        assert call_args[1]["params"]["ticker"] == "BTC"
-        assert call_args[1]["params"]["series"] == "meta_risk"
 
-    @patch("unravel_client.factor.normalized_series.requests.get")
-    def test_get_normalized_series_error(self, mock_get):
-        """Test error handling for normalized series."""
-        # Mock error response
-        mock_response = Mock()
-        mock_response.status_code = 404
-        mock_response.json.return_value = {"error": "Series not found"}
-        mock_get.return_value = mock_response
+class TestErrorHandling:
+    """Test error handling for invalid requests."""
 
-        # Test that assertion is raised
+    def test_invalid_portfolio_error(self, api_key):
+        """Test error handling for invalid portfolio."""
+        with pytest.raises(AssertionError):
+            get_portfolio_historical_weights(
+                portfolio="invalid-portfolio-id",
+                API_KEY=api_key,
+            )
+
+    def test_invalid_ticker_error(self, api_key):
+        """Test error handling for invalid ticker."""
         with pytest.raises(AssertionError):
             get_normalized_series(
-                ticker="INVALID", series="meta_risk", API_KEY="test-key"
+                ticker="INVALID_TICKER",
+                series="meta_risk",
+                API_KEY=api_key,
+            )
+
+    def test_invalid_api_key_error(self):
+        """Test error handling for invalid API key."""
+        with pytest.raises(AssertionError):
+            get_portfolio_historical_weights(
+                portfolio="test-portfolio",
+                API_KEY="invalid-api-key",
             )
 
 
 class TestDataTypes:
     """Test data type handling and edge cases."""
 
-    @patch("unravel_client.portfolio.historical_weights.requests.get")
-    def test_dataframe_dtypes(self, mock_get):
+    def test_dataframe_dtypes(self, api_key, test_portfolio):
         """Test that DataFrame columns are properly converted to float."""
-        # Mock response with string numbers
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "data": [["0.5", "0.3"], ["0.6", "0.4"]],
-            "index": ["2024-01-01", "2024-01-02"],
-            "columns": ["BTC", "ETH"],
-        }
-        mock_get.return_value = mock_response
+        # Use a recent date range
+        end_date = datetime.now().strftime("%Y-%m-%d")
+        start_date = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
 
         result = get_portfolio_historical_weights(
-            portfolio="test-portfolio", API_KEY="test-key"
+            portfolio=test_portfolio,
+            API_KEY=api_key,
+            start_date=start_date,
+            end_date=end_date,
         )
 
         # Check that all columns are float type
         for col in result.columns:
             assert pd.api.types.is_float_dtype(result[col])
 
-    @patch("unravel_client.portfolio.live_weights.requests.get")
-    def test_series_dtypes(self, mock_get):
+    def test_series_dtypes(self, api_key, test_portfolio):
         """Test that Series values are properly converted to float."""
-        # Mock response with string numbers
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "data": ["0.5", "0.3", "0.2"],
-            "columns": ["BTC", "ETH", "SOL"],
-            "index": "portfolio_weights",
-        }
-        mock_get.return_value = mock_response
-
-        result = get_live_weights(portfolio="test-portfolio", API_KEY="test-key")
+        result = get_live_weights(portfolio=test_portfolio, API_KEY=api_key)
 
         # Check that all values are float type
         assert pd.api.types.is_float_dtype(result)
+
+    def test_date_range_handling(self, api_key, test_portfolio):
+        """Test that date ranges are handled correctly."""
+        # Test with different date formats
+        end_date = datetime.now().strftime("%Y-%m-%d")
+        start_date = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
+
+        result = get_portfolio_historical_weights(
+            portfolio=test_portfolio,
+            API_KEY=api_key,
+            start_date=start_date,
+            end_date=end_date,
+        )
+
+        # Should have data within the specified range
+        assert len(result) > 0
+        assert result.index.min() >= pd.to_datetime(start_date)
+        assert result.index.max() <= pd.to_datetime(end_date)

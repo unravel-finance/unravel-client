@@ -31,13 +31,19 @@ def get_normalized_series(
         "series": series,
         "start_date": start_date,
         "end_date": end_date,
-        "smoothing": str(smoothing),
     }
+    if smoothing is not None:
+        params["smoothing"] = str(smoothing)
     headers = {"X-API-KEY": API_KEY}
     response = requests.get(url, headers=headers, params=params)
-    assert (
-        response.status_code == 200
-    ), f"Error fetching exogenous series for {ticker} and {series}, response: {response.json()}"
+    if response.status_code != 200:
+        try:
+            error_msg = response.json()
+        except:
+            error_msg = response.text
+        raise AssertionError(
+            f"Error fetching exogenous series for {ticker} and {series}, response: {error_msg}"
+        )
 
     response = response.json()
     return pd.Series(response["data"], index=pd.to_datetime(response["index"])).rename(

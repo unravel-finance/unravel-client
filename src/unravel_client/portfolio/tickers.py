@@ -20,9 +20,14 @@ def get_tickers(portfolioId: str, API_KEY: str, universe_size: int | str) -> lis
     params = {"id": portfolioId, "universe_size": universe_size}
     headers = {"X-API-KEY": API_KEY}
     response = requests.get(url, headers=headers, params=params)
-    assert (
-        response.status_code == 200
-    ), f"Error fetching price series for {portfolioId}, response: {response.json()}"
+    if response.status_code != 200:
+        try:
+            error_msg = response.json()
+        except:
+            error_msg = response.text
+        raise AssertionError(
+            f"Error fetching tickers for {portfolioId}, response: {error_msg}"
+        )
 
     response = response.json()
     return response["tickers"]

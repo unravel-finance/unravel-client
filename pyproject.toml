@@ -46,7 +46,8 @@ quality = [
 tests = [
   "pytest~=7.1.2",
   "pytest-cov>=4.0",
-  "hypothesis~=6.112.4"
+  "hypothesis~=6.112.4",
+  "python-dotenv>=1.0.0"
 ]
 
 

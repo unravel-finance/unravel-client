@@ -166,6 +166,46 @@ MIT License
 
 [Unravel Finance](https://unravel.finance)
 
+## Testing
+
+The test suite uses real API endpoints to ensure the library works correctly with the actual Unravel API.
+
+### Setting up Environment Variables
+
+You need to set up environment variables for testing:
+
+```bash
+# Required: Your Unravel API key
+export UNRAVEL_API_KEY="your_api_key_here"
+```
+
+### Running Tests
+
+```bash
+# Install with test dependencies
+pip install -e ".[tests]"
+
+# Run all tests
+pytest tests/ -v
+
+# Run specific test categories
+pytest tests/test_unravel_client.py::TestRiskSignalFunctions -v
+pytest tests/test_unravel_client.py::TestErrorHandling -v
+```
+
+### Test Categories
+
+- **Portfolio Functions**: Tests portfolio-related API calls using `momentum_enhanced.40` portfolio
+- **Risk Signal Functions**: Tests risk signal API calls
+- **Error Handling**: Tests error handling for invalid requests
+- **Data Types**: Tests data type conversion and validation
+
+### CI/CD
+
+The GitHub Actions workflow automatically runs tests using secrets:
+
+- `UNRAVEL_API_KEY`: Your API key
+
 ## Support
 
 For issues and questions, please visit our [GitHub repository](https://github.com/unravel-finance/unravel-client/issues).
