@@ -8,10 +8,10 @@ from unravel_client import get_tickers
 class TestTickers:
     """Test tickers API function."""
 
-    def test_get_tickers_success(self, api_key, test_portfolio_base):
+    def test_get_tickers_success(self, api_key, test_portfolio):
         """Test successful retrieval of portfolio tickers."""
         result = get_tickers(
-            portfolioId=test_portfolio_base,
+            portfolioId=test_portfolio,
             API_KEY=api_key,
             universe_size="full",
         )
