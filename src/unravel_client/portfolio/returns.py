@@ -1,15 +1,15 @@
 import pandas as pd
 import requests
 
-from api.constants import BASEAPI
+from ..constants import BASEAPI
 
 
 def get_portfolio_returns(
     portfolioId: str,
     API_KEY: str,
-    start_date: str = None,
-    end_date: str = None,
-    smoothing: str = None,
+    start_date: str | None = None,
+    end_date: str | None = None,
+    smoothing: str | None = None,
 ) -> pd.Series:
     """
     Fetch portfolio returns from the Unravel API.

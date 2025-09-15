@@ -1,6 +1,6 @@
 import requests
 
-from api.constants import BASEAPI
+from ..constants import BASEAPI
 
 
 def get_tickers(portfolioId: str, API_KEY: str, universe_size: int | str) -> list[str]:

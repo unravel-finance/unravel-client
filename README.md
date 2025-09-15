@@ -43,6 +43,27 @@ risk_signal = unravel_client.get_normalized_series(
     API_KEY=API_KEY,
     start_date="2024-01-01"
 )
+
+# Get portfolio returns
+returns = unravel_client.get_portfolio_returns(
+    portfolioId="your-portfolio-id",
+    API_KEY=API_KEY,
+    start_date="2024-01-01"
+)
+
+# Get portfolio tickers
+tickers = unravel_client.get_tickers(
+    portfolioId="your-portfolio-id",
+    API_KEY=API_KEY,
+    universe_size="full"
+)
+
+# Get historical factors
+factors = unravel_client.get_portfolio_factors_historical(
+    portfolioId="your-portfolio-id",
+    tickers=["BTC", "ETH"],
+    API_KEY=API_KEY
+)
 ```
 
 ## API Reference
@@ -74,6 +95,44 @@ Fetch current portfolio weights from the Unravel API.
 
 **Returns:** `pandas.Series` with current weights
 
+#### `get_portfolio_returns(portfolioId, API_KEY, start_date=None, end_date=None, smoothing=None)`
+
+Fetch portfolio returns from the Unravel API.
+
+**Parameters:**
+
+- `portfolioId` (str): The portfolio ID
+- `API_KEY` (str): Your API key
+- `start_date` (str, optional): Start date in 'YYYY-MM-DD' format
+- `end_date` (str, optional): End date in 'YYYY-MM-DD' format
+- `smoothing` (str, optional): Smoothing parameter
+
+**Returns:** `pandas.Series` with portfolio returns
+
+#### `get_tickers(portfolioId, API_KEY, universe_size)`
+
+Fetch the tickers for a portfolio from the Unravel API.
+
+**Parameters:**
+
+- `portfolioId` (str): The portfolio ID
+- `API_KEY` (str): Your API key
+- `universe_size` (int | str): Universe size or 'full' for all available tickers
+
+**Returns:** `list[str]` with ticker symbols
+
+#### `get_portfolio_factors_historical(portfolioId, tickers, API_KEY)`
+
+Fetch historical factors for a portfolio from the Unravel API.
+
+**Parameters:**
+
+- `portfolioId` (str): The portfolio ID
+- `tickers` (list[str]): List of tickers in the portfolio
+- `API_KEY` (str): Your API key
+
+**Returns:** `pandas.DataFrame` with historical factor data
+
 ### Risk Signal Functions
 
 #### `get_normalized_series(ticker, series, API_KEY, start_date=None, end_date=None, smoothing=None)`
@@ -96,7 +155,8 @@ Fetch normalized risk signal data from the Unravel API.
 - Python 3.11+
 - pandas >= 2.0.0
 - numpy >= 1.3.0
-- requests
+- requests >= 2.25.0
+- tqdm >= 4.66.4
 
 ## License
 

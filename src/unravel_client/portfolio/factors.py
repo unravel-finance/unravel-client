@@ -1,7 +1,7 @@
 import pandas as pd
 import requests
 
-from api.constants import BASEAPI
+from ..constants import BASEAPI
 
 
 def get_portfolio_factors_historical(
