@@ -1,8 +1,10 @@
 import requests
 
 from ..constants import BASEAPI
+from ..decorators import handle_api_errors
 
 
+@handle_api_errors
 def get_tickers(portfolioId: str, API_KEY: str, universe_size: int | str) -> list[str]:
     """
     Fetch the tickers for a portfolio from the Unravel API.

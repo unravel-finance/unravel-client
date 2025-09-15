@@ -2,8 +2,10 @@ import pandas as pd
 import requests
 
 from ..constants import BASEAPI
+from ..decorators import handle_api_errors
 
 
+@handle_api_errors
 def get_live_weights(portfolio: str, API_KEY: str) -> pd.Series:
     """
     Fetch last value of normalized risk signal data from the Unravel API.

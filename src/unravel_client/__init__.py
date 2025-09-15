@@ -4,6 +4,7 @@ from .portfolio.historical_weights import get_portfolio_historical_weights
 from .portfolio.live_weights import get_live_weights
 from .portfolio.returns import get_portfolio_returns
 from .portfolio.tickers import get_tickers
+from .portfolio.universe import get_historical_universe
 
 __all__ = [
     "get_portfolio_historical_weights",
@@ -12,4 +13,5 @@ __all__ = [
     "get_portfolio_returns",
     "get_portfolio_factors_historical",
     "get_tickers",
+    "get_historical_universe",
 ]
