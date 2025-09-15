@@ -11,6 +11,7 @@ pip install unravel-client
 ## Features
 
 - **Portfolio Data**: Access historical and live portfolio weights
+- **Cross-section Factors**: Access cross-sectional factors as raw data
 - **Risk Signals**: Retrieve normalized risk factor series for cryptocurrencies
 - **Easy Integration**: Simple API calls with pandas DataFrame/Series returns
 
