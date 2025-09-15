@@ -14,7 +14,7 @@ def test_get_portfolio_returns_success(api_key, test_portfolio):
     start_date = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
 
     result = get_portfolio_returns(
-        portfolioId=test_portfolio,
+        portfolio=test_portfolio,
         API_KEY=api_key,
         start_date=start_date,
         end_date=end_date,

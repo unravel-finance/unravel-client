@@ -5,22 +5,31 @@ from ..decorators import handle_api_errors
 
 
 @handle_api_errors
-def get_tickers(portfolioId: str, API_KEY: str, universe_size: int | str) -> list[str]:
+def get_tickers(
+    id: str,
+    API_KEY: str,
+    universe_size: int | str,
+    exchange: str | None = None,
+) -> list[str]:
     """
     Fetch the tickers for a portfolio from the Unravel API.
 
     Args:
-        portfolioId (str): The portfolio ID
+        id (str): Portfolio Factor Identifier without the universe specifier (eg. momentum instead of momentum.20)
         API_KEY (str): The API key to use for the request
-        universe_size (int | str): The universe size to use for the request.
-            Pass in 'full' to get all available tickers for the portfolio.
+        universe_size (int | str): Universe size for the portfolio (e.g., 20, 30, 40) or 'full' to get all tickers
+        exchange (str | None): Exchange constraint for portfolio data. Valid options are: unconstrained (default), binance, okx, hyperliquid.
 
     Returns:
         list[str]: List of tickers in the portfolio
     """
 
     url = f"{BASEAPI}/portfolio/tickers"
-    params = {"id": portfolioId, "universe_size": universe_size}
+    params = {"id": id, "universe_size": universe_size}
+
+    if exchange is not None:
+        params["exchange"] = exchange
+
     headers = {"X-API-KEY": API_KEY}
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
