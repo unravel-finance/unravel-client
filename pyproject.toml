@@ -3,7 +3,7 @@ build-backend = "hatchling.build"
 requires = ["hatchling"]
 
 [project]
-name = "risklab"
+name = "unravel-client"
 version = "1.0.3"
 authors = [
   { name="Mark Aron Szulyovszky", email="mark@unravel.finance" },
@@ -23,19 +23,19 @@ dependencies = [
   "pandas>=2.0.0",
   "tqdm>=4.66.4",
 ]
-description = "Applied Quantiative (Portfolio) Risk Management"
-keywords = ["quant", "risk", "quantiative", "backtesting", "portfolio"]
+description = "Client API for unravel.finance, multi-factor, market-neutral crypto portfolios"
+keywords = ["quant", "market-neutral", "risk", "quantiative", "backtesting", "portfolio"]
 license = "MIT"
 readme = "README.md"
 requires-python = ">=3.11"
 
 [tool.hatch.version]
-path = "src/risklab/__init__.py"
+path = "src/unravel-client/__init__.py"
 
 
 [project.urls]
-Issues = "https://github.com/dream-faster/risklab/issues"
-Source = "https://github.com/dream-faster/risklab"
+Issues = "https://github.com/unravel-finance/unravel-client/issues"
+Source = "https://github.com/unravel-finance/unravel-client"
 
 [project.optional-dependencies]
 quality = [
@@ -68,7 +68,7 @@ push = false
 
 [tool.hatch.envs.quality]
 dependencies = [
-  "risklab[quality]"
+  "unravel-client[quality]"
 ]
 detached = true
 
@@ -81,7 +81,7 @@ format = [
 ]
 
 [tool.hatch.envs.test]
-dependencies = ["risklab[tests]"]
+dependencies = ["unravel-client[tests]"]
 
 [tool.hatch.envs.test.scripts]
 run = "pytest tests/ --durations 0 -s"
