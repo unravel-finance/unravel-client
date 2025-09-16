@@ -16,7 +16,7 @@ def test_get_portfolio_historical_weights_success(api_key, test_portfolio):
     start_date = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
 
     result = get_portfolio_historical_weights(
-        portfolio=test_portfolio,
+        id=test_portfolio,
         api_key=api_key,
         start_date=start_date,
         end_date=end_date,
@@ -38,7 +38,7 @@ def test_dataframe_dtypes(api_key, test_portfolio):
     start_date = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
 
     result = get_portfolio_historical_weights(
-        portfolio=test_portfolio,
+        id=test_portfolio,
         api_key=api_key,
         start_date=start_date,
         end_date=end_date,
@@ -56,7 +56,7 @@ def test_date_range_handling(api_key, test_portfolio):
     start_date = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
 
     result = get_portfolio_historical_weights(
-        portfolio=test_portfolio,
+        id=test_portfolio,
         api_key=api_key,
         start_date=start_date,
         end_date=end_date,
@@ -72,7 +72,7 @@ def test_invalid_portfolio_error(api_key):
     """Test error handling for invalid portfolio."""
     with pytest.raises(requests.HTTPError):
         get_portfolio_historical_weights(
-            portfolio="invalid-portfolio-id",
+            id="invalid-portfolio-id",
             api_key=api_key,
         )
 
@@ -81,6 +81,6 @@ def test_invalid_api_key_error():
     """Test error handling for invalid API key."""
     with pytest.raises(requests.HTTPError):
         get_portfolio_historical_weights(
-            portfolio="test-portfolio",
+            id="test-portfolio",
             api_key="invalid-api-key",
         )

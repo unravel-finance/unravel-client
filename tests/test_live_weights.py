@@ -7,7 +7,7 @@ from unravel_client import get_live_weights
 
 def test_get_live_weights_success(api_key, test_portfolio):
     """Test successful retrieval of live portfolio weights."""
-    result = get_live_weights(portfolio=test_portfolio, api_key=api_key)
+    result = get_live_weights(id=test_portfolio, api_key=api_key)
 
     # Assertions
     assert isinstance(result, pd.Series)
@@ -18,7 +18,7 @@ def test_get_live_weights_success(api_key, test_portfolio):
 
 def test_series_dtypes(api_key, test_portfolio):
     """Test that Series values are properly converted to float."""
-    result = get_live_weights(portfolio=test_portfolio, api_key=api_key)
+    result = get_live_weights(id=test_portfolio, api_key=api_key)
 
     # Check that all values are float type
     assert pd.api.types.is_float_dtype(result)
