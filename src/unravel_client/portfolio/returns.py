@@ -7,28 +7,28 @@ from ..decorators import handle_api_errors
 
 @handle_api_errors
 def get_portfolio_returns(
-    portfolio: str,
+    id: str,
     api_key: str,
-    start_date: str | None = None,
-    end_date: str | None = None,
     smoothing: str | None = None,
     exchange: str | None = None,
+    start_date: str | None = None,
+    end_date: str | None = None,
 ) -> pd.Series:
     """
     Fetch portfolio returns from the Unravel API.
 
     Args:
-        portfolio (str): Portfolio Identifier (eg. momentum.20)
+        id (str): Portfolio Identifier (eg. momentum.20)
         api_key (str): The API key to use for the request
+        smoothing (str | None): Portfolio smoothing window for the data. Portfolio smoothing window for the data. Valid values and default smoothing for each portfolio can be found in the [Unravel Catalog](https://unravel.finance/home/api/catalog)
+        exchange (str | None): Exchange constraint for portfolio data. Valid options are found in the [Unravel Catalog](https://unravel.finance/home/api/catalog)
         start_date (str | None): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
         end_date (str | None): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
-        smoothing (str | None): Portfolio smoothing window for the data. Valid values are 0 (no smoothing), 5, 10, 15, 20, or 30 days.
-        exchange (str | None): Exchange constraint for portfolio data. Valid options are: unconstrained (default), binance, okx, hyperliquid.
     Returns:
         pd.Series: Portfolio returns data
     """
     url = f"{BASEAPI}/portfolio/returns"
-    params = {"portfolio": portfolio}
+    params = {"portfolio": id}
 
     if start_date is not None:
         params["start_date"] = start_date

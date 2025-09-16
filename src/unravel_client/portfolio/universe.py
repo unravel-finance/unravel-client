@@ -8,9 +8,9 @@ from ..decorators import handle_api_errors
 @handle_api_errors
 def get_historical_universe(
     size: str,
+    api_key: str,
     start_date: str,
     end_date: str,
-    api_key: str,
     exchange: str | None = None,
 ) -> pd.DataFrame:
     """
@@ -18,10 +18,10 @@ def get_historical_universe(
 
     Args:
         size (str): Portfolio size - number of assets to include. Must be one of: 20, 30, or 40
+        api_key (str): The API key to use for the request
         start_date (str): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
         end_date (str): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
-        api_key (str): The API key to use for the request
-        exchange (str | None): Exchange constraint for portfolio data. Valid options are: unconstrained (default), binance, okx, hyperliquid.
+        exchange (str | None): Exchange constraint for portfolio data. Valid options are found in the [Unravel Catalog](https://unravel.finance/home/api/catalog)
 
     Returns:
         pd.DataFrame: DataFrame of tickers in the portfolio [True and False]

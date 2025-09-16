@@ -17,8 +17,8 @@ def get_tickers(
     Args:
         id (str): Portfolio Factor Identifier without the universe specifier (eg. momentum instead of momentum.20)
         api_key (str): The API key to use for the request
-        universe_size (int | str): Universe size for the portfolio (e.g., 20, 30, 40) or 'full' to get all tickers
-        exchange (str | None): Exchange constraint for portfolio data. Valid options are: unconstrained (default), binance, okx, hyperliquid.
+        universe_size (int | str): Universe size for the portfolio (e.g., 20, 30, 40) or 'full' to get all tickers.
+        exchange (str | None): Exchange constraint for portfolio data. Valid options are found in the [Unravel Catalog](https://unravel.finance/home/api/catalog)
 
     Returns:
         list[str]: List of tickers in the portfolio
