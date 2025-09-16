@@ -14,7 +14,7 @@ def test_get_portfolio_returns_success(api_key, test_portfolio):
 
     result = get_portfolio_returns(
         portfolio=test_portfolio,
-        API_KEY=api_key,
+        api_key=api_key,
         # start_date=start_date,
         # end_date=end_date,
     )

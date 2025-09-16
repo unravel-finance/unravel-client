@@ -9,7 +9,7 @@ def test_get_tickers_success(api_key, test_portfolio_base):
     """Test successful retrieval of portfolio tickers."""
     result = get_tickers(
         id=test_portfolio_base,
-        API_KEY=api_key,
+        api_key=api_key,
         universe_size="full",
     )
 

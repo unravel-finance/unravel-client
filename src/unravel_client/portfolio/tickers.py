@@ -7,7 +7,7 @@ from ..decorators import handle_api_errors
 @handle_api_errors
 def get_tickers(
     id: str,
-    API_KEY: str,
+    api_key: str,
     universe_size: int | str,
     exchange: str | None = None,
 ) -> list[str]:
@@ -16,7 +16,7 @@ def get_tickers(
 
     Args:
         id (str): Portfolio Factor Identifier without the universe specifier (eg. momentum instead of momentum.20)
-        API_KEY (str): The API key to use for the request
+        api_key (str): The API key to use for the request
         universe_size (int | str): Universe size for the portfolio (e.g., 20, 30, 40) or 'full' to get all tickers
         exchange (str | None): Exchange constraint for portfolio data. Valid options are: unconstrained (default), binance, okx, hyperliquid.
 
@@ -30,7 +30,7 @@ def get_tickers(
     if exchange is not None:
         params["exchange"] = exchange
 
-    headers = {"X-API-KEY": API_KEY}
+    headers = {"X-API-KEY": api_key}
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
 

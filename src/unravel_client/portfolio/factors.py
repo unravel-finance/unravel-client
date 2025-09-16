@@ -9,7 +9,7 @@ from ..decorators import handle_api_errors
 def get_portfolio_factors_historical(
     id: str,
     tickers: list[str],
-    API_KEY: str,
+    api_key: str,
     smoothing: str | None = None,
     start_date: str | None = None,
     end_date: str | None = None,
@@ -20,7 +20,7 @@ def get_portfolio_factors_historical(
     Args:
         id (str): Portfolio Factor Identifier without the universe specifier (eg. momentum instead of momentum.20)
         tickers (list[str]): List of tickers in the portfolio
-        API_KEY (str): The API key to use for the request
+        api_key (str): The API key to use for the request
         smoothing (str | None): Portfolio smoothing window for the data. Valid values are 0 (no smoothing), 5, 10, 15, 20, or 30 days.
         start_date (str | None): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
         end_date (str | None): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
@@ -37,7 +37,7 @@ def get_portfolio_factors_historical(
     if end_date is not None:
         params["end_date"] = end_date
 
-    headers = {"X-API-KEY": API_KEY}
+    headers = {"X-API-KEY": api_key}
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
 
@@ -53,7 +53,7 @@ def get_portfolio_factors_historical(
 def get_portfolio_factors_live(
     id: str,
     tickers: list[str],
-    API_KEY: str,
+    api_key: str,
     smoothing: str | None = None,
 ) -> pd.Series:
     """
@@ -62,7 +62,7 @@ def get_portfolio_factors_live(
     Args:
         id (str): Portfolio Factor Identifier without the universe specifier (eg. momentum instead of momentum.20)
         tickers (list[str]): List of tickers in the portfolio
-        API_KEY (str): The API key to use for the request
+        api_key (str): The API key to use for the request
         smoothing (str | None): Portfolio smoothing window for the data. Valid values are 0 (no smoothing), 5, 10, 15, 20, or 30 days.
     Returns:
         pd.Series: Latest factor data for the specified tickers
@@ -73,7 +73,7 @@ def get_portfolio_factors_live(
     if smoothing is not None:
         params["smoothing"] = smoothing
 
-    headers = {"X-API-KEY": API_KEY}
+    headers = {"X-API-KEY": api_key}
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
 

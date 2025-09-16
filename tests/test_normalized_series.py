@@ -18,7 +18,7 @@ def test_get_normalized_series_success(api_key):
     result = get_normalized_series(
         ticker="BTC",
         series="meta_risk",
-        API_KEY=api_key,
+        api_key=api_key,
         start_date=start_date,
         end_date=end_date,
     )
@@ -37,5 +37,5 @@ def test_invalid_ticker_error(api_key):
         get_normalized_series(
             ticker="INVALID_TICKER",
             series="meta_risk",
-            API_KEY=api_key,
+            api_key=api_key,
         )
