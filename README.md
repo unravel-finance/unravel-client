@@ -1,3 +1,5 @@
+<img width="1584" height="396" alt="github-cover" src="https://github.com/user-attachments/assets/ede1334b-571c-4f64-a6c3-465138a15526" />
+
 # Unravel Client
 
 A Python client library for accessing the Unravel Finance API, providing convenient wrappers for multi-factor, market-neutral crypto portfolio data and risk signals.
