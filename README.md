@@ -108,7 +108,7 @@ Fetch historical portfolio weights from the Unravel API.
 
 **Returns:** `pandas.DataFrame` with historical weights
 
-----
+---
 
 #### `get_live_weights(portfolio, api_key, smoothing=None, exchange=None)`
 
@@ -123,7 +123,7 @@ Fetch current portfolio weights from the Unravel API.
 
 **Returns:** `pandas.Series` with current weights
 
-----
+---
 
 #### `get_portfolio_returns(portfolio, api_key, start_date=None, end_date=None, smoothing=None, exchange=None)`
 
@@ -140,7 +140,7 @@ Fetch portfolio returns from the Unravel API.
 
 **Returns:** `pandas.Series` with portfolio returns
 
-----
+---
 
 #### `get_tickers(id, api_key, universe_size, exchange=None)`
 
@@ -155,7 +155,7 @@ Fetch the tickers for a portfolio from the Unravel API.
 
 **Returns:** `list[str]` with ticker symbols
 
-----
+---
 
 #### `get_portfolio_factors_historical(id, tickers, api_key, smoothing=None, start_date=None, end_date=None)`
 
@@ -172,7 +172,7 @@ Fetch historical factors for a portfolio from the Unravel API.
 
 **Returns:** `pandas.DataFrame` with historical factor data
 
-----
+---
 
 #### `get_portfolio_factors_live(id, tickers, api_key, smoothing=None)`
 
@@ -187,7 +187,7 @@ Fetch the latest factor data for specific tickers within a single factor portfol
 
 **Returns:** `pandas.Series` with latest factor data
 
-----
+---
 
 #### `get_historical_universe(size, start_date, end_date, api_key, exchange=None)`
 
@@ -220,7 +220,7 @@ Fetch normalized risk signal data from the Unravel API.
 
 **Returns:** `pandas.Series` with risk signal data
 
-----
+---
 
 ### Price Functions
 
@@ -239,7 +239,7 @@ Fetch closing prices for a ticker from the Unravel API.
 
 **Returns:** `pandas.Series` with closing prices
 
-----
+---
 
 ## Requirements
 
@@ -267,7 +267,7 @@ You need to set up environment variables for testing:
 
 ```bash
 # Required: Your Unravel API key
-export UNRAVEL_api_key="your_api_key_here"
+export UNRAVEL_API_KEY="your_api_key_here"
 ```
 
 ### Running Tests
