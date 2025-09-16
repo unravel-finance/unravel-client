@@ -21,7 +21,7 @@ def get_portfolio_factors_historical(
         id (str): Portfolio Factor Identifier without the universe specifier (eg. momentum instead of momentum.20)
         tickers (list[str]): List of tickers in the portfolio
         api_key (str): The API key to use for the request
-        smoothing (str | None): Portfolio smoothing window for the data. Valid values are 0 (no smoothing), 5, 10, 15, 20, or 30 days.
+        smoothing (str | None): Portfolio smoothing window for the data. Valid values and default smoothing for each portfolio can be found in the [Unravel Catalog](https://unravel.finance/home/api/catalog)
         start_date (str | None): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
         end_date (str | None): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
     Returns:
