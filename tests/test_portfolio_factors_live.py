@@ -12,7 +12,7 @@ def test_get_portfolio_factors_live_success(
     # First get some tickers to use
     tickers = get_tickers(
         id=test_portfolio_base,
-        API_KEY=api_key,
+        api_key=api_key,
         universe_size=20,
     )
 
@@ -20,7 +20,7 @@ def test_get_portfolio_factors_live_success(
         result = get_portfolio_factors_live(
             id=test_portfolio,
             tickers=tickers[:3],
-            API_KEY=api_key,
+            api_key=api_key,
         )
 
         # Assertions
@@ -37,7 +37,7 @@ def test_get_portfolio_factors_live_with_smoothing(
     # First get some tickers to use
     tickers = get_tickers(
         id=test_portfolio_base,
-        API_KEY=api_key,
+        api_key=api_key,
         universe_size=20,
     )
 
@@ -45,7 +45,7 @@ def test_get_portfolio_factors_live_with_smoothing(
         result = get_portfolio_factors_live(
             id=test_portfolio,
             tickers=tickers[:2],
-            API_KEY=api_key,
+            api_key=api_key,
             smoothing="5",
         )
 

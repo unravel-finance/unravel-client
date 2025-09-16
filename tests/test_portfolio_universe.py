@@ -17,7 +17,7 @@ def test_get_historical_universe_different_sizes(api_key):
             size=size,
             start_date="2024-01-01",
             end_date="2024-01-07",
-            API_KEY=api_key,
+            api_key=api_key,
         )
 
         # Basic assertions
@@ -40,7 +40,7 @@ def test_get_historical_universe_date_range(api_key):
             size="20",
             start_date=start_date,
             end_date=end_date,
-            API_KEY=api_key,
+            api_key=api_key,
         )
 
         # Basic assertions
@@ -72,7 +72,7 @@ def test_get_historical_universe_invalid_parameters(api_key):
             size="invalid_size",
             start_date="2024-01-01",
             end_date="2024-01-31",
-            API_KEY=api_key,
+            api_key=api_key,
         )
 
     # Test with invalid API key
@@ -81,7 +81,7 @@ def test_get_historical_universe_invalid_parameters(api_key):
             size="20",
             start_date="2024-01-01",
             end_date="2024-01-31",
-            API_KEY="invalid_key",
+            api_key="invalid_key",
         )
 
 
@@ -91,7 +91,7 @@ def test_get_historical_universe_data_consistency(api_key):
         size="20",
         start_date="2024-01-01",
         end_date="2024-01-31",
-        API_KEY=api_key,
+        api_key=api_key,
     )
 
     # Check that we have consistent data structure

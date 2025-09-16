@@ -8,7 +8,7 @@ from .decorators import handle_api_errors
 @handle_api_errors
 def get_price(
     ticker: str,
-    API_KEY: str,
+    api_key: str,
     start_date: str | None = None,
     end_date: str | None = None,
 ) -> pd.Series:
@@ -19,7 +19,7 @@ def get_price(
 
     Args:
         ticker (str): Ticker symbol (e.g., BTC, ETH)
-        API_KEY (str): The API key to use for the request
+        api_key (str): The API key to use for the request
         start_date (str | None): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
         end_date (str | None): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
     Returns:
@@ -33,7 +33,7 @@ def get_price(
     if end_date is not None:
         params["end_date"] = end_date
 
-    headers = {"X-API-KEY": API_KEY}
+    headers = {"X-API-KEY": api_key}
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
 

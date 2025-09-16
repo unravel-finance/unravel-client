@@ -17,7 +17,7 @@ def test_get_portfolio_historical_weights_success(api_key, test_portfolio):
 
     result = get_portfolio_historical_weights(
         portfolio=test_portfolio,
-        API_KEY=api_key,
+        api_key=api_key,
         start_date=start_date,
         end_date=end_date,
     )
@@ -39,7 +39,7 @@ def test_dataframe_dtypes(api_key, test_portfolio):
 
     result = get_portfolio_historical_weights(
         portfolio=test_portfolio,
-        API_KEY=api_key,
+        api_key=api_key,
         start_date=start_date,
         end_date=end_date,
     )
@@ -57,7 +57,7 @@ def test_date_range_handling(api_key, test_portfolio):
 
     result = get_portfolio_historical_weights(
         portfolio=test_portfolio,
-        API_KEY=api_key,
+        api_key=api_key,
         start_date=start_date,
         end_date=end_date,
     )
@@ -73,7 +73,7 @@ def test_invalid_portfolio_error(api_key):
     with pytest.raises(requests.HTTPError):
         get_portfolio_historical_weights(
             portfolio="invalid-portfolio-id",
-            API_KEY=api_key,
+            api_key=api_key,
         )
 
 
@@ -82,5 +82,5 @@ def test_invalid_api_key_error():
     with pytest.raises(requests.HTTPError):
         get_portfolio_historical_weights(
             portfolio="test-portfolio",
-            API_KEY="invalid-api-key",
+            api_key="invalid-api-key",
         )

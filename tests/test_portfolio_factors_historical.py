@@ -12,7 +12,7 @@ def test_get_portfolio_factors_historical_success(
     # First get some tickers to use
     tickers = get_tickers(
         id=test_portfolio_base,
-        API_KEY=api_key,
+        api_key=api_key,
         universe_size=20,
     )
 
@@ -20,7 +20,7 @@ def test_get_portfolio_factors_historical_success(
         result = get_portfolio_factors_historical(
             id=test_portfolio,
             tickers=tickers[:3],
-            API_KEY=api_key,
+            api_key=api_key,
         )
 
         # Assertions

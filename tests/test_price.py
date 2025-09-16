@@ -15,7 +15,7 @@ def test_get_price_success(api_key):
 
     result = get_price(
         ticker="BTC",
-        API_KEY=api_key,
+        api_key=api_key,
         start_date=start_date,
         end_date=end_date,
     )
@@ -31,7 +31,7 @@ def test_get_price_without_date_range(api_key):
     """Test price retrieval without date range."""
     result = get_price(
         ticker="BTC",
-        API_KEY=api_key,
+        api_key=api_key,
     )
 
     # Assertions
@@ -48,7 +48,7 @@ def test_get_price_different_tickers(api_key):
     for ticker in tickers:
         result = get_price(
             ticker=ticker,
-            API_KEY=api_key,
+            api_key=api_key,
         )
 
         # Assertions

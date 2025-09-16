@@ -9,7 +9,7 @@ from ..decorators import handle_api_errors
 def get_normalized_series(
     ticker: str,
     series: str,
-    API_KEY: str,
+    api_key: str,
     start_date: str | None = None,
     end_date: str | None = None,
     smoothing: str | None = None,
@@ -20,7 +20,7 @@ def get_normalized_series(
     Args:
         ticker (str): Ticker symbol (e.g., BTC, ETH)
         series (str): Series to retrieve (e.g., exchange_outflow, sentiment_aggregate)
-        API_KEY (str): The API key to use for the request
+        api_key (str): The API key to use for the request
         start_date (str | None): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
         end_date (str | None): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
         smoothing (str | None): Smoothing window for the data. Valid values are "default", "0", "7", "30". Default is "default".
@@ -40,7 +40,7 @@ def get_normalized_series(
     if smoothing is not None:
         params["smoothing"] = smoothing
 
-    headers = {"X-API-KEY": API_KEY}
+    headers = {"X-API-KEY": api_key}
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
 

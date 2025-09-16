@@ -10,7 +10,7 @@ def get_historical_universe(
     size: str,
     start_date: str,
     end_date: str,
-    API_KEY: str,
+    api_key: str,
     exchange: str | None = None,
 ) -> pd.DataFrame:
     """
@@ -20,7 +20,7 @@ def get_historical_universe(
         size (str): Portfolio size - number of assets to include. Must be one of: 20, 30, or 40
         start_date (str): Filter data to only include dates on or after this date (ISO format: YYYY-MM-DD)
         end_date (str): Filter data to only include dates on or before this date (ISO format: YYYY-MM-DD)
-        API_KEY (str): The API key to use for the request
+        api_key (str): The API key to use for the request
         exchange (str | None): Exchange constraint for portfolio data. Valid options are: unconstrained (default), binance, okx, hyperliquid.
 
     Returns:
@@ -33,7 +33,7 @@ def get_historical_universe(
     if exchange is not None:
         params["exchange"] = exchange
 
-    headers = {"X-API-KEY": API_KEY}
+    headers = {"X-API-KEY": api_key}
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
 
