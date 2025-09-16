@@ -7,7 +7,7 @@ from ..decorators import handle_api_errors
 
 @handle_api_errors
 def get_portfolio_historical_weights(
-    portfolio: str,
+    id: str,
     api_key: str,
     smoothing: str | None = None,
     exchange: str | None = None,
@@ -18,7 +18,7 @@ def get_portfolio_historical_weights(
     Fetch normalized risk signal data from the Unravel API.
 
     Args:
-        portfolio (str): Portfolio Identifier (eg. momentum.20)
+        id (str): Portfolio Identifier (eg. momentum.20)
         api_key (str): The API key to use for the request
         smoothing (str | None): Portfolio smoothing window for the data. Portfolio smoothing window for the data. Valid values and default smoothing for each portfolio can be found in the [Unravel Catalog](https://unravel.finance/home/api/catalog)
         exchange (str | None): Exchange constraint for portfolio data. Valid options are found in the [Unravel Catalog](https://unravel.finance/home/api/catalog)
@@ -28,7 +28,7 @@ def get_portfolio_historical_weights(
         pd.DataFrame: Historical weights of the portfolio
     """
     url = f"{BASEAPI}/portfolio/historical-weights"
-    params = {"portfolio": portfolio}
+    params = {"portfolio": id}
 
     if start_date is not None:
         params["start_date"] = start_date

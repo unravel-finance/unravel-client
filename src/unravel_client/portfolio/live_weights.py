@@ -7,7 +7,7 @@ from ..decorators import handle_api_errors
 
 @handle_api_errors
 def get_live_weights(
-    portfolio: str,
+    id: str,
     api_key: str,
     smoothing: str | None = None,
     exchange: str | None = None,
@@ -16,7 +16,7 @@ def get_live_weights(
     Fetch last value of normalized risk signal data from the Unravel API.
 
     Args:
-        portfolio (str): Portfolio Identifier (eg. momentum.20)
+        id (str): Portfolio Identifier (eg. momentum.20)
         api_key (str): The API key to use for the request
         smoothing (str | None): Portfolio smoothing window for the data. Portfolio smoothing window for the data. Valid values and default smoothing for each portfolio can be found in the [Unravel Catalog](https://unravel.finance/home/api/catalog)
         exchange (str | None): Exchange constraint for portfolio data. Valid options are found in the [Unravel Catalog](https://unravel.finance/home/api/catalog)
@@ -24,7 +24,7 @@ def get_live_weights(
         pd.Series: Current weights of the portfolio
     """
     url = f"{BASEAPI}/portfolio/live-weights"
-    params = {"portfolio": portfolio}
+    params = {"portfolio": id}
 
     if smoothing is not None:
         params["smoothing"] = smoothing
