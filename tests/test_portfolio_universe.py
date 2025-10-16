@@ -26,6 +26,12 @@ def test_get_historical_universe_different_sizes(api_key):
         assert len(result.columns) > 0, f"Should have some tickers for size {size}"
         assert len(result.index) > 0, f"Should have some dates for size {size}"
 
+        # Check dtypes for all columns
+        for col in result.columns:
+            assert pd.api.types.is_float_dtype(
+                result[col]
+            ), f"Column {col} should be float type"
+
 
 def test_get_historical_universe_date_range(api_key):
     """Test historical universe with different date ranges."""
@@ -62,6 +68,12 @@ def test_get_historical_universe_date_range(api_key):
         assert result.index.max() <= pd.to_datetime(
             end_date
         ), f"End date should be <= {end_date}"
+
+        # Check dtypes for all columns
+        for col in result.columns:
+            assert pd.api.types.is_float_dtype(
+                result[col]
+            ), f"Column {col} should be float type"
 
 
 def test_get_historical_universe_invalid_parameters(api_key):
@@ -111,3 +123,9 @@ def test_get_historical_universe_data_consistency(api_key):
     assert (
         result.index.is_monotonic_increasing
     ), "Dates should be in chronological order"
+
+    # Check dtypes for all columns
+    for col in result.columns:
+        assert pd.api.types.is_float_dtype(
+            result[col]
+        ), f"Column {col} should be float type"
