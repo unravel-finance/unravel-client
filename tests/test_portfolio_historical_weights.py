@@ -46,7 +46,9 @@ def test_dataframe_dtypes(api_key, test_portfolio):
 
     # Check that all columns are float type
     for col in result.columns:
-        assert pd.api.types.is_float_dtype(result[col])
+        assert pd.api.types.is_float_dtype(
+            result[col]
+        ), f"Column {col} should be float type it is {result[col].dtype}"
 
 
 def test_date_range_handling(api_key, test_portfolio):
