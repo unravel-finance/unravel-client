@@ -91,7 +91,7 @@ def test_get_prices_success(api_key):
     for col in result.columns:
         assert pd.api.types.is_float_dtype(
             result[col]
-        ), f"Column {col} should be float type"
+        ), f"Column {col} should be float type it is {result[col].dtype}"
 
 
 def test_get_prices_without_date_range(api_key):
@@ -118,7 +118,7 @@ def test_get_prices_without_date_range(api_key):
     for col in result.columns:
         assert pd.api.types.is_float_dtype(
             result[col]
-        ), f"Column {col} should be float type"
+        ), f"Column {col} should be float type it is {result[col].dtype}"
 
 
 def test_get_prices_single_ticker(api_key):
@@ -164,7 +164,7 @@ def test_get_prices_multiple_tickers_different_sets(api_key):
         for col in result.columns:
             assert pd.api.types.is_float_dtype(
                 result[col]
-            ), f"Column {col} should be float type"
+            ), f"Column {col} should be float type it is {result[col].dtype}"
 
 
 def test_get_prices_date_range_consistency(api_key):
@@ -197,7 +197,7 @@ def test_get_prices_date_range_consistency(api_key):
     for col in result.columns:
         assert pd.api.types.is_float_dtype(
             result[col]
-        ), f"Column {col} should be float type"
+        ), f"Column {col} should be float type it is {result[col].dtype}"
 
 
 def test_get_prices_empty_tickers_list(api_key):

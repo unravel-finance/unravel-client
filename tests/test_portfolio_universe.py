@@ -28,9 +28,9 @@ def test_get_historical_universe_different_sizes(api_key):
 
         # Check dtypes for all columns
         for col in result.columns:
-            assert pd.api.types.is_float_dtype(
+            assert pd.api.types.is_bool_dtype(
                 result[col]
-            ), f"Column {col} should be float type"
+            ), f"Column {col} should be bool type it is {result[col].dtype}"
 
 
 def test_get_historical_universe_date_range(api_key):
@@ -71,9 +71,9 @@ def test_get_historical_universe_date_range(api_key):
 
         # Check dtypes for all columns
         for col in result.columns:
-            assert pd.api.types.is_float_dtype(
+            assert pd.api.types.is_bool_dtype(
                 result[col]
-            ), f"Column {col} should be float type"
+            ), f"Column {col} should be bool type it is {result[col].dtype}"
 
 
 def test_get_historical_universe_invalid_parameters(api_key):
@@ -126,6 +126,6 @@ def test_get_historical_universe_data_consistency(api_key):
 
     # Check dtypes for all columns
     for col in result.columns:
-        assert pd.api.types.is_float_dtype(
+        assert pd.api.types.is_bool_dtype(
             result[col]
-        ), f"Column {col} should be float type"
+        ), f"Column {col} should be bool type it is {result[col].dtype}"

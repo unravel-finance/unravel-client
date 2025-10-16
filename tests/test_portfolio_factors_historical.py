@@ -35,4 +35,4 @@ def test_get_portfolio_factors_historical_success(
         for col in result.columns:
             assert pd.api.types.is_float_dtype(
                 result[col]
-            ), f"Column {col} should be float type"
+            ), f"Column {col} should be float type it is {result[col].dtype}"
