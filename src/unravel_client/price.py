@@ -65,6 +65,9 @@ def get_prices(
         pd.DataFrame: DataFrame of closing prices with datetime index and ticker columns
     """
     url = f"{BASEAPI}/price"
+    assert not isinstance(
+        tickers, str
+    ), "tickers must be a sequence of strings (list, tuple, pandas.Index, etc.)"
     params = {"ticker": ",".join(tickers)}
 
     if start_date is not None:
@@ -77,8 +80,16 @@ def get_prices(
     response.raise_for_status()
 
     response = response.json()
-    return pd.DataFrame(
-        response["data"],
-        index=pd.to_datetime(response["index"]),
-        columns=response["columns"],
+
+    if "columns" in response:
+        return pd.DataFrame(
+            response["data"],
+            index=pd.to_datetime(response["index"]),
+            columns=response["columns"],
+        )
+
+    return (
+        pd.Series(response["data"], index=pd.to_datetime(response["index"]))
+        .rename(tickers[0].replace(",", "").replace(" ", ""))
+        .to_frame()
     )
