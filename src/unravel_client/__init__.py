@@ -9,6 +9,7 @@ from .portfolio.returns import get_portfolio_returns
 from .portfolio.tickers import get_tickers
 from .portfolio.universe import get_historical_universe
 from .price import get_price, get_prices
+from .portfolio.risk_overlay import get_risk_overlay
 
 __all__ = [
     "get_portfolio_historical_weights",
@@ -21,4 +22,5 @@ __all__ = [
     "get_historical_universe",
     "get_price",
     "get_prices",
+    "get_risk_overlay",
 ]
