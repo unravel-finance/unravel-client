@@ -1,7 +1,9 @@
 """
 Tests for risk API endpoints.
 """
+
 import pandas as pd
+
 from unravel_client import (
     get_risk_overlays,
     get_risk_overlays_live,
@@ -11,9 +13,7 @@ from unravel_client import (
 )
 
 
-def test_get_risk_overlays_success(
-    api_key, test_portfolio_base
-):
+def test_get_risk_overlays_success(api_key, test_portfolio_base):
     """Test successful retrieval of risk overlays."""
     tickers = get_tickers(
         id=test_portfolio_base,
@@ -34,14 +34,12 @@ def test_get_risk_overlays_success(
         assert result.shape[1] > 0, "Should have at least one column"
 
         for col in result.columns:
-            assert pd.api.types.is_float_dtype(
-                result[col]
-            ), f"Column {col} should be float type"
+            assert pd.api.types.is_float_dtype(result[col]), (
+                f"Column {col} should be float type"
+            )
 
 
-def test_get_risk_overlays_with_date_range(
-    api_key, test_portfolio_base
-):
+def test_get_risk_overlays_with_date_range(api_key, test_portfolio_base):
     """Test risk overlays with date filtering."""
     result = get_risk_overlays(
         portfolio=test_portfolio_base,
@@ -56,9 +54,7 @@ def test_get_risk_overlays_with_date_range(
         assert all(result.index <= pd.Timestamp("2023-12-31"))
 
 
-def test_get_risk_overlays_live_success(
-    api_key, test_portfolio_base
-):
+def test_get_risk_overlays_live_success(api_key, test_portfolio_base):
     """Test successful retrieval of latest risk overlay."""
     result = get_risk_overlays_live(
         portfolio=test_portfolio_base,
@@ -66,7 +62,7 @@ def test_get_risk_overlays_live_success(
         api_key=api_key,
     )
 
-    assert isinstance(result, (float, int, type(None)))
+    assert isinstance(result, (float | int | None))
 
 
 def test_get_risk_regime_success(api_key):
@@ -79,9 +75,7 @@ def test_get_risk_regime_success(api_key):
     assert isinstance(result, pd.Series)
     assert len(result) > 0, "Should have risk regime data"
     assert isinstance(result.index, pd.DatetimeIndex)
-    assert pd.api.types.is_float_dtype(
-        result
-    ), "Series values should be float type"
+    assert pd.api.types.is_float_dtype(result), "Series values should be float type"
 
 
 def test_get_risk_regime_with_date_range(api_key):
@@ -105,4 +99,4 @@ def test_get_risk_regime_live_success(api_key):
         api_key=api_key,
     )
 
-    assert isinstance(result, (float, int, type(None)))
+    assert isinstance(result, (float | int | None))
