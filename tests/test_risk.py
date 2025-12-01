@@ -5,8 +5,8 @@ Tests for risk API endpoints.
 import pandas as pd
 
 from unravel_client import (
-    get_risk_overlays,
-    get_risk_overlays_live,
+    get_risk_overlay,
+    get_risk_overlay_live,
     get_risk_regime,
     get_risk_regime_live,
     get_tickers,
@@ -22,7 +22,7 @@ def test_get_risk_overlays_success(api_key, test_portfolio_base):
     )
 
     if len(tickers) > 0:
-        result = get_risk_overlays(
+        result = get_risk_overlay(
             portfolio=test_portfolio_base,
             risk="momentum",
             api_key=api_key,
@@ -41,7 +41,7 @@ def test_get_risk_overlays_success(api_key, test_portfolio_base):
 
 def test_get_risk_overlays_with_date_range(api_key, test_portfolio_base):
     """Test risk overlays with date filtering."""
-    result = get_risk_overlays(
+    result = get_risk_overlay(
         portfolio=test_portfolio_base,
         risk="momentum",
         api_key=api_key,
@@ -56,7 +56,7 @@ def test_get_risk_overlays_with_date_range(api_key, test_portfolio_base):
 
 def test_get_risk_overlays_live_success(api_key, test_portfolio_base):
     """Test successful retrieval of latest risk overlay."""
-    result = get_risk_overlays_live(
+    result = get_risk_overlay_live(
         portfolio=test_portfolio_base,
         risk="momentum",
         api_key=api_key,

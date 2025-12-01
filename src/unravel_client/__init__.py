@@ -7,8 +7,8 @@ from .portfolio.historical_weights import get_portfolio_historical_weights
 from .portfolio.live_weights import get_live_weights
 from .portfolio.returns import get_portfolio_returns
 from .portfolio.risk import (
-    get_risk_overlays,
-    get_risk_overlays_live,
+    get_risk_overlay,
+    get_risk_overlay_live,
     get_risk_regime,
     get_risk_regime_live,
 )

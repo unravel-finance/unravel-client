@@ -6,7 +6,7 @@ from ..decorators import handle_api_errors
 
 
 @handle_api_errors
-def get_risk_overlays(
+def get_risk_overlay(
     portfolio: str,
     risk: str,
     api_key: str,
@@ -33,7 +33,7 @@ def get_risk_overlays(
 
 
 @handle_api_errors
-def get_risk_overlays_live(
+def get_risk_overlay_live(
     portfolio: str,
     risk: str,
     api_key: str,
