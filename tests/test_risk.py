@@ -24,7 +24,7 @@ def test_get_risk_overlays_success(api_key, test_portfolio_base):
     if len(tickers) > 0:
         result = get_risk_overlay(
             portfolio=test_portfolio_base,
-            risk="momentum",
+            overlay="momentum",
             api_key=api_key,
         )
 
@@ -43,7 +43,7 @@ def test_get_risk_overlays_with_date_range(api_key, test_portfolio_base):
     """Test risk overlays with date filtering."""
     result = get_risk_overlay(
         portfolio=test_portfolio_base,
-        risk="momentum",
+        overlay="momentum",
         api_key=api_key,
         start_date="2023-01-01",
         end_date="2023-12-31",
@@ -58,7 +58,7 @@ def test_get_risk_overlays_live_success(api_key, test_portfolio_base):
     """Test successful retrieval of latest risk overlay."""
     result = get_risk_overlay_live(
         portfolio=test_portfolio_base,
-        risk="momentum",
+        overlay="momentum",
         api_key=api_key,
     )
 
@@ -68,7 +68,7 @@ def test_get_risk_overlays_live_success(api_key, test_portfolio_base):
 def test_get_risk_regime_success(api_key):
     """Test successful retrieval of risk regime data."""
     result = get_risk_regime(
-        risk="momentum",
+        overlay="momentum",
         api_key=api_key,
     )
 
@@ -81,7 +81,7 @@ def test_get_risk_regime_success(api_key):
 def test_get_risk_regime_with_date_range(api_key):
     """Test risk regime with date filtering."""
     result = get_risk_regime(
-        risk="momentum",
+        overlay="momentum",
         api_key=api_key,
         start_date="2023-01-01",
         end_date="2023-12-31",
@@ -95,7 +95,7 @@ def test_get_risk_regime_with_date_range(api_key):
 def test_get_risk_regime_live_success(api_key):
     """Test successful retrieval of latest risk regime."""
     result = get_risk_regime_live(
-        risk="momentum",
+        overlay="momentum",
         api_key=api_key,
     )
 
