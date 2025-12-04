@@ -79,7 +79,7 @@ def get_risk_overlay_live(
     response = response.json()
     return pd.Series(
         [response["data"]],
-        index=pd.to_datetime(response["index"]),
+        index=[pd.to_datetime(response["index"])],
     ).astype(float)
 
 
@@ -155,5 +155,5 @@ def get_risk_regime_live(
 
     return pd.Series(
         [response["data"]],
-        index=pd.to_datetime(response["index"]),
+        index=[pd.to_datetime(response["index"])],
     ).astype(float)

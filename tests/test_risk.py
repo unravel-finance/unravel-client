@@ -9,34 +9,22 @@ from unravel_client import (
     get_risk_overlay_live,
     get_risk_regime,
     get_risk_regime_live,
-    get_tickers,
 )
 
 
 def test_get_risk_overlays_success(api_key, test_portfolio_base):
     """Test successful retrieval of risk overlays."""
-    tickers = get_tickers(
-        id=test_portfolio_base,
+
+    result = get_risk_overlay(
+        portfolio=test_portfolio_base,
+        overlay="trend",
         api_key=api_key,
-        universe_size=20,
     )
 
-    if len(tickers) > 0:
-        result = get_risk_overlay(
-            portfolio=test_portfolio_base,
-            overlay="trend",
-            api_key=api_key,
-        )
-
-        assert isinstance(result, pd.DataFrame)
-        assert len(result) > 0, "Should have risk overlay data"
-        assert isinstance(result.index, pd.DatetimeIndex)
-        assert result.shape[1] > 0, "Should have at least one column"
-
-        for col in result.columns:
-            assert pd.api.types.is_float_dtype(result[col]), (
-                f"Column {col} should be float type"
-            )
+    assert isinstance(result, pd.Series)
+    assert isinstance(result.index, pd.DatetimeIndex)
+    assert len(result) > 0, "Should have at least one data point"
+    assert pd.api.types.is_float_dtype(result), "Series values should be float type"
 
 
 def test_get_risk_overlays_with_date_range(api_key, test_portfolio_base):
@@ -75,8 +63,8 @@ def test_get_risk_regime_success(api_key):
     )
 
     assert isinstance(result, pd.Series)
-    assert len(result) > 0, "Should have risk regime data"
     assert isinstance(result.index, pd.DatetimeIndex)
+    assert len(result) > 0, "Should have at least one data point"
     assert pd.api.types.is_float_dtype(result), "Series values should be float type"
 
 
