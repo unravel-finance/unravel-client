@@ -12,7 +12,7 @@ def get_risk_overlay(
     api_key: str,
     start_date: str | None = None,
     end_date: str | None = None,
-) -> pd.DataFrame:
+) -> pd.Series:
     """
     Retrieve historical risk overlay data for a portfolio.
 
@@ -24,7 +24,7 @@ def get_risk_overlay(
         end_date: Optional filter end date in YYYY-MM-DD format
 
     Returns:
-        pd.DataFrame: DataFrame with datetime index and float values representing
+        pd.Series: Series with datetime index and float values representing
                       historical risk overlay values for each timestamp
 
     Raises:
@@ -43,7 +43,7 @@ def get_risk_overlay(
     response.raise_for_status()
 
     response = response.json()
-    return pd.DataFrame(
+    return pd.Series(
         response["data"],
         index=pd.to_datetime(response["index"]),
     ).astype(float)
