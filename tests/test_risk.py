@@ -62,7 +62,9 @@ def test_get_risk_overlays_live_success(api_key, test_portfolio_base):
         api_key=api_key,
     )
 
-    assert isinstance(result, (float | int | None))
+    assert isinstance(result, pd.Series)
+    assert len(result) == 1
+    assert pd.api.types.is_float_dtype(result)
 
 
 def test_get_risk_regime_success(api_key):
@@ -87,6 +89,7 @@ def test_get_risk_regime_with_date_range(api_key):
         end_date="2023-12-31",
     )
 
+    assert isinstance(result, pd.Series)
     if len(result) > 0:
         assert all(result.index >= pd.Timestamp("2023-01-01"))
         assert all(result.index <= pd.Timestamp("2023-12-31"))
@@ -99,4 +102,6 @@ def test_get_risk_regime_live_success(api_key):
         api_key=api_key,
     )
 
-    assert isinstance(result, (float | int | None))
+    assert isinstance(result, pd.Series)
+    assert len(result) == 1
+    assert pd.api.types.is_float_dtype(result)

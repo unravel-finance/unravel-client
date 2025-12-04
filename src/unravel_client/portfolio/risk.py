@@ -54,7 +54,7 @@ def get_risk_overlay_live(
     portfolio: str,
     overlay: str,
     api_key: str,
-) -> float:
+) -> pd.Series:
     """
     Retrieve the latest risk overlay value for a portfolio.
 
@@ -64,7 +64,8 @@ def get_risk_overlay_live(
         api_key: API authentication key
 
     Returns:
-        float: The latest risk overlay value for the portfolio and overlay
+        pd.Series: Series with datetime index and float values representing
+                   latest risk overlay value
 
     Raises:
         APIError: If the API request fails or returns an error status
@@ -75,9 +76,11 @@ def get_risk_overlay_live(
     headers = {"X-API-KEY": api_key}
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
-
     response = response.json()
-    return response["data"]
+    return pd.Series(
+        [response["data"]],
+        index=pd.to_datetime(response["index"]),
+    ).astype(float)
 
 
 @handle_api_errors
@@ -126,7 +129,7 @@ def get_risk_regime(
 def get_risk_regime_live(
     overlay: str,
     api_key: str,
-) -> float:
+) -> pd.Series:
     """
     Retrieve the latest market-wide risk regime value.
 
@@ -135,7 +138,8 @@ def get_risk_regime_live(
         api_key: API authentication key
 
     Returns:
-        float: The latest risk regime value for the risk factor
+        pd.Series: Series with datetime index and float values representing
+                   latest risk regime value
 
     Raises:
         APIError: If the API request fails or returns an error status
@@ -148,4 +152,8 @@ def get_risk_regime_live(
     response.raise_for_status()
 
     response = response.json()
-    return response["data"]
+
+    return pd.Series(
+        [response["data"]],
+        index=pd.to_datetime(response["index"]),
+    ).astype(float)
