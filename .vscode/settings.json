@@ -5,5 +5,32 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "python.analysis.typeCheckingMode": "basic",
-
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+        }
+    },
+    "python.terminal.activateEnvironment": true,
+    "terminal.integrated.env.osx": {
+        "PYTHONPATH": "${workspaceFolder}",
+    },
+    "terminal.integrated.env.linux": {
+        "PYTHONPATH": "${workspaceFolder}",
+    },
+    "python.analysis.autoImportCompletions": true,
+    "python.autoComplete.extraPaths": [
+        "${workspaceFolder}/src"
+    ],
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/src"
+    ],
+    "ruff.configuration": {
+        "unsafe-fixes": true,
+        "lint": {
+            "unfixable": ["F401"]
+        }
+    }
 }

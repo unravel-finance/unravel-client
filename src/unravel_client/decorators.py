@@ -1,10 +1,44 @@
 """
 Decorators for the Unravel client library.
 """
-import functools
 from collections.abc import Callable
 
 import requests
+import time
+
+
+def retry_on_error(num_trials: int = 3, wait: float = 2.0):
+    """
+    Decorator to retry a function on exception.
+
+    Args:
+        num_trials (int): Number of attempts before giving up.
+        wait (float): Seconds to wait between attempts.
+
+    Returns:
+        Decorated function that retries on error.
+    """
+
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            last_exception = None
+            for attempt in range(1, num_trials + 1):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:  # noqa: BLE001
+                    last_exception = e
+                    if attempt == num_trials:
+                        break
+                    time.sleep(wait)
+            if last_exception is not None:
+                raise last_exception
+            return None
+
+        wrapper.__name__ = func.__name__
+        wrapper.__doc__ = func.__doc__
+        return wrapper
+
+    return decorator
 
 
 def handle_api_errors(func: Callable) -> Callable:
@@ -25,7 +59,6 @@ def handle_api_errors(func: Callable) -> Callable:
         requests.HTTPError: With detailed error message from API response
     """
 
-    @functools.wraps(func)
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
@@ -50,4 +83,6 @@ def handle_api_errors(func: Callable) -> Callable:
             else:
                 raise e
 
+    wrapper.__name__ = func.__name__
+    wrapper.__doc__ = func.__doc__
     return wrapper
