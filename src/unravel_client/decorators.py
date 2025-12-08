@@ -9,9 +9,6 @@ import requests
 
 
 def transform_exception(exception: Exception) -> Exception:
-    """
-    Transform an exception into a requests.HTTPError.
-    """
     if not isinstance(exception, requests.HTTPError):
         return exception
     response = getattr(exception, "response", None)
