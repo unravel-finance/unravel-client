@@ -1,4 +1,3 @@
-from .factor.normalized_series import get_normalized_series
 from .portfolio.factors import (
     get_portfolio_factors_historical,
     get_portfolio_factors_live,
@@ -19,7 +18,6 @@ from .price import get_price, get_prices
 __all__ = [
     "get_historical_universe",
     "get_live_weights",
-    "get_normalized_series",
     "get_portfolio_factors_historical",
     "get_portfolio_factors_live",
     "get_portfolio_historical_weights",
