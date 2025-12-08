@@ -2,10 +2,10 @@ import pandas as pd
 import requests
 
 from ..constants import BASEAPI
-from ..decorators import handle_api_errors
+from ..decorators import retry_on_error
 
 
-@handle_api_errors
+@retry_on_error(num_trials=3, wait=2.0)
 def get_live_weights(
     id: str,
     api_key: str,

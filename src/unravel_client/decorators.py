@@ -1,53 +1,70 @@
 """
 Decorators for the Unravel client library.
 """
-import functools
+
+import time
 from collections.abc import Callable
 
 import requests
 
 
-def handle_api_errors(func: Callable) -> Callable:
-    """
-    Decorator to handle API errors and provide detailed error messages.
+def transform_exception(exception: Exception) -> Exception:
+    if not isinstance(exception, requests.HTTPError):
+        return exception
+    response = getattr(exception, "response", None)
 
-    This decorator wraps functions that make HTTP requests and automatically
-    handles error responses by extracting error messages from the API response
-    and raising more informative exceptions.
+    if response is None:
+        return exception
+    try:
+        error_data = response.json()
+        error_message = (
+            error_data.get("error")
+            or error_data.get("message")
+            or error_data.get("detail")
+            or error_data.get("description")
+            or "Unknown error"
+        )
+        return requests.HTTPError(
+            f"{response.status_code} {response.reason}: {error_message}",
+            response=response,
+        )
+    except Exception:  # noqa: BLE001
+        return exception
+
+
+def retry_on_error(
+    num_trials: int = 3,
+    wait: float = 2.0,
+    transform_exception: Callable = transform_exception,
+):
+    """
+    Decorator to retry a function on exception.
 
     Args:
-        func: The function to decorate (should make HTTP requests)
+        num_trials (int): Number of attempts before giving up.
+        wait (float): Seconds to wait between attempts.
 
     Returns:
-        The decorated function with enhanced error handling
-
-    Raises:
-        requests.HTTPError: With detailed error message from API response
+        Decorated function that retries on error.
     """
 
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except requests.HTTPError as e:
-            response = getattr(e, "response", None)
-            if response is not None:
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            last_exception = None
+            for attempt in range(1, num_trials + 1):
                 try:
-                    error_data = response.json()
-                    error_message = (
-                        error_data.get("error")
-                        or error_data.get("message")
-                        or error_data.get("detail")
-                        or error_data.get("description")
-                        or "Unknown error"
-                    )
-                    raise requests.HTTPError(
-                        f"{response.status_code} {response.reason}: {error_message}",
-                        response=response,
-                    )
-                except (ValueError, KeyError, AttributeError):
-                    raise e
-            else:
-                raise e
+                    return func(*args, **kwargs)
+                except Exception as e:  # noqa: BLE001
+                    last_exception = e
+                    if attempt == num_trials:
+                        break
+                    time.sleep(wait)
+            if last_exception is not None:
+                raise transform_exception(last_exception)
+            return None
 
-    return wrapper
+        wrapper.__name__ = func.__name__
+        wrapper.__doc__ = func.__doc__
+        return wrapper
+
+    return decorator

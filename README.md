@@ -39,13 +39,6 @@ live_weights = unravel_client.get_live_weights(
     api_key=api_key
 )
 
-# Get normalized risk signals
-risk_signal = unravel_client.get_normalized_series(
-    ticker="BTC",
-    series="meta_risk",
-    api_key=api_key,
-    start_date="2024-01-01"
-)
 
 # Get portfolio returns
 returns = unravel_client.get_portfolio_returns(
