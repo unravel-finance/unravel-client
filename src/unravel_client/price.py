@@ -2,11 +2,10 @@ import pandas as pd
 import requests
 
 from .constants import BASEAPI
-from .decorators import handle_api_errors, retry_on_error
+from .decorators import retry_on_error
 
 
 @retry_on_error(num_trials=3, wait=2.0)
-@handle_api_errors
 def get_price(
     ticker: str,
     api_key: str,
@@ -46,7 +45,6 @@ def get_price(
 
 
 @retry_on_error(num_trials=3, wait=2.0)
-@handle_api_errors
 def get_prices(
     tickers: list[str],
     api_key: str,

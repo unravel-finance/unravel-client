@@ -2,11 +2,10 @@ import pandas as pd
 import requests
 
 from ..constants import BASEAPI
-from ..decorators import handle_api_errors, retry_on_error
+from ..decorators import retry_on_error
 
 
 @retry_on_error(num_trials=3, wait=2.0)
-@handle_api_errors
 def get_risk_overlay(
     portfolio: str,
     overlay: str,
@@ -51,7 +50,6 @@ def get_risk_overlay(
 
 
 @retry_on_error(num_trials=3, wait=2.0)
-@handle_api_errors
 def get_risk_overlay_live(
     portfolio: str,
     overlay: str,
@@ -86,7 +84,6 @@ def get_risk_overlay_live(
 
 
 @retry_on_error(num_trials=3, wait=2.0)
-@handle_api_errors
 def get_risk_regime(
     overlay: str,
     api_key: str,
@@ -129,7 +126,6 @@ def get_risk_regime(
 
 
 @retry_on_error(num_trials=3, wait=2.0)
-@handle_api_errors
 def get_risk_regime_live(
     overlay: str,
     api_key: str,
