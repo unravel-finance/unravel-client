@@ -1,7 +1,7 @@
 import pandas as pd
 import requests
 
-from ..constants import BASEAPI
+from ..constants import BASEAPI, get_headers
 from ..decorators import retry_on_error
 
 
@@ -38,7 +38,7 @@ def get_risk_overlay(
     if end_date is not None:
         params["end_date"] = end_date
 
-    headers = {"X-API-KEY": api_key}
+    headers = get_headers(api_key)
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
 
@@ -73,7 +73,7 @@ def get_risk_overlay_live(
     url = f"{BASEAPI}/portfolio/risk-overlay-live"
     params = {"portfolio": portfolio, "overlay": overlay}
 
-    headers = {"X-API-KEY": api_key}
+    headers = get_headers(api_key)
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
     response = response.json()
@@ -114,7 +114,7 @@ def get_risk_regime(
     if end_date is not None:
         params["end_date"] = end_date
 
-    headers = {"X-API-KEY": api_key}
+    headers = get_headers(api_key)
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
 
@@ -147,7 +147,7 @@ def get_risk_regime_live(
     url = f"{BASEAPI}/risk-regime-live"
     params = {"overlay": overlay}
 
-    headers = {"X-API-KEY": api_key}
+    headers = get_headers(api_key)
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
 
