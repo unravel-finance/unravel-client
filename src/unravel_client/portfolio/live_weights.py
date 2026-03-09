@@ -1,7 +1,7 @@
 import pandas as pd
 import requests
 
-from ..constants import BASEAPI
+from ..constants import BASEAPI, get_headers
 from ..decorators import retry_on_error
 
 
@@ -31,7 +31,7 @@ def get_live_weights(
     if exchange is not None:
         params["exchange"] = exchange
 
-    headers = {"X-API-KEY": api_key}
+    headers = get_headers(api_key)
     response = requests.get(url, headers=headers, params=params)
     response.raise_for_status()
 
