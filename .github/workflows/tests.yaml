@@ -33,6 +33,9 @@ jobs:
       - name: run-tests
         env:
           UNRAVEL_API_KEY: ${{ secrets.UNRAVEL_API_KEY }}
+          BASE_URL: ${{ secrets.BASE_URL }}
+          CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
+          CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
         run: pytest . -s --cov --durations 0
 
       - uses: codecov/codecov-action@v3
