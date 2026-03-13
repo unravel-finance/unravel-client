@@ -33,6 +33,9 @@ jobs:
       - name: run-tests
         env:
           UNRAVEL_API_KEY: ${{ secrets.UNRAVEL_API_KEY }}
+          UNRAVEL_BASE_URL: ${{ secrets.UNRAVEL_BASE_URL }}
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
         run: pytest . -s --cov --durations 0
 
       - uses: codecov/codecov-action@v3
