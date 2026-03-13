@@ -39,8 +39,7 @@ jobs:
       - name: run-tests
         env:
           UNRAVEL_API_KEY: ${{ secrets.UNRAVEL_API_KEY }}
-          UNRAVEL_BASE_URL: ${{ secrets.UNRAVEL_BASE_URL }}
-          BASE_URL: ${{ inputs.base_url || 'https://unravel.finance' }}
+          UNRAVEL_BASE_URL: ${{ inputs.base_url || 'https://unravel.finance' }}
           CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
           CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
         run: pytest . -s --cov --durations 0
