@@ -7,7 +7,6 @@ on:
       base_url:
         description: 'API base URL (leave empty for production)'
         required: false
-        default: ''
 
 jobs:
   run-tests:
