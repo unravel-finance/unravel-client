@@ -39,8 +39,8 @@ jobs:
         env:
           UNRAVEL_API_KEY: ${{ inputs.base_url && secrets.UNRAVEL_API_KEY_STAGING || secrets.UNRAVEL_API_KEY }}
           UNRAVEL_BASE_URL: ${{ inputs.base_url || 'https://unravel.finance' }}
-          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
-          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+          CF_ACCESS_CLIENT_ID: ${{ inputs.base_url && secrets.CF_ACCESS_CLIENT_ID || '' }}
+          CF_ACCESS_CLIENT_SECRET: ${{ inputs.base_url && secrets.CF_ACCESS_CLIENT_SECRET || '' }}
         run: pytest . -s --cov --durations 0
 
       - uses: codecov/codecov-action@v3
