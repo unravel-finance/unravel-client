@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import requests
 
 from ..constants import BASEAPI, get_headers
