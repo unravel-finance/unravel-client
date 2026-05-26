@@ -22,3 +22,13 @@ def test_series_dtypes(api_key, test_portfolio):
 
     # Check that all values are float type
     assert pd.api.types.is_float_dtype(result)
+
+
+def test_as_of_close_vs_latest_differ(api_key, test_portfolio):
+    """Test that as_of='close' and as_of='latest' return different results."""
+    result_close = get_live_weights(id=test_portfolio, api_key=api_key, as_of="close")
+    result_latest = get_live_weights(id=test_portfolio, api_key=api_key, as_of="latest")
+
+    assert not result_close.equals(result_latest), (
+        "as_of='close' and as_of='latest' should return different weights"
+    )
