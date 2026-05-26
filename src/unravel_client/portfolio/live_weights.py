@@ -13,6 +13,7 @@ def get_live_weights(
     api_key: str,
     smoothing: str | None = None,
     exchange: str | None = None,
+    as_of: str | None = None,
 ) -> pd.Series:
     """
     Fetch last value of normalized risk signal data from the Unravel API.
@@ -22,6 +23,7 @@ def get_live_weights(
         api_key (str): The API key to use for the request
         smoothing (str | None): Portfolio smoothing window for the data. Portfolio smoothing window for the data. Valid values and default smoothing for each portfolio can be found in the [Unravel Catalog](https://unravel.finance/home/api/catalog)
         exchange (str | None): Exchange constraint for portfolio data. Valid options are found in the [Unravel Catalog](https://unravel.finance/home/api/catalog)
+        as_of (str | None): Point-in-time reference for the data. Valid values are "latest" (most recent intraday data) and "close" (previous market close).
     Returns:
         pd.Series: Current weights of the portfolio
     """
@@ -32,6 +34,8 @@ def get_live_weights(
         params["smoothing"] = smoothing
     if exchange is not None:
         params["exchange"] = exchange
+    if as_of is not None:
+        params["as_of"] = as_of
 
     headers = get_headers(api_key)
     response = requests.get(url, headers=headers, params=params)

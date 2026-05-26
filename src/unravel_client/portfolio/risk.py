@@ -56,6 +56,7 @@ def get_risk_overlay_live(
     portfolio: str,
     overlay: str,
     api_key: str,
+    as_of: str | None = None,
 ) -> pd.Series:
     """
     Retrieve the latest risk overlay value for a portfolio.
@@ -64,6 +65,7 @@ def get_risk_overlay_live(
         portfolio: Portfolio ID (see [Unravel Catalog](https://unravel.finance/home/api/catalog/portfolios))
         overlay: Risk overlay ID (see [Unravel Catalog](https://unravel.finance/home/api/catalog/risk-overlays))
         api_key: API authentication key
+        as_of: Point-in-time reference for the data. Valid values are "latest" (most recent intraday data) and "close" (previous market close).
 
     Returns:
         pd.Series: Series with datetime index and float values representing
@@ -74,6 +76,9 @@ def get_risk_overlay_live(
     """
     url = f"{BASEAPI}/portfolio/risk-overlay-live"
     params = {"portfolio": portfolio, "overlay": overlay}
+
+    if as_of is not None:
+        params["as_of"] = as_of
 
     headers = get_headers(api_key)
     response = requests.get(url, headers=headers, params=params)
@@ -131,6 +136,7 @@ def get_risk_regime(
 def get_risk_regime_live(
     overlay: str,
     api_key: str,
+    as_of: str | None = None,
 ) -> pd.Series:
     """
     Retrieve the latest market-wide risk regime value.
@@ -138,6 +144,7 @@ def get_risk_regime_live(
     Args:
         overlay: Risk overlay ID (see [Unravel Catalog](https://unravel.finance/home/api/catalog/risk-overlays))
         api_key: API authentication key
+        as_of: Point-in-time reference for the data. Valid values are "latest" (most recent intraday data) and "close" (previous market close).
 
     Returns:
         pd.Series: Series with datetime index and float values representing
@@ -148,6 +155,9 @@ def get_risk_regime_live(
     """
     url = f"{BASEAPI}/risk-regime-live"
     params = {"overlay": overlay}
+
+    if as_of is not None:
+        params["as_of"] = as_of
 
     headers = get_headers(api_key)
     response = requests.get(url, headers=headers, params=params)

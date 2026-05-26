@@ -57,6 +57,7 @@ def get_portfolio_factors_live(
     tickers: list[str],
     api_key: str,
     smoothing: str | None = None,
+    as_of: str | None = None,
 ) -> pd.Series:
     """
     Fetch the latest factor data for specific tickers within a single factor portfolio.
@@ -66,6 +67,7 @@ def get_portfolio_factors_live(
         tickers (list[str]): List of tickers in the portfolio
         api_key (str): The API key to use for the request
         smoothing (str | None): Portfolio smoothing window for the data. Valid values are 0 (no smoothing), 5, 10, 15, 20, or 30 days.
+        as_of (str | None): Point-in-time reference for the data. Valid values are "latest" (most recent intraday data) and "close" (previous market close).
     Returns:
         pd.Series: Latest factor data for the specified tickers
     """
@@ -74,6 +76,8 @@ def get_portfolio_factors_live(
 
     if smoothing is not None:
         params["smoothing"] = smoothing
+    if as_of is not None:
+        params["as_of"] = as_of
 
     headers = get_headers(api_key)
     response = requests.get(url, headers=headers, params=params)
