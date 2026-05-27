@@ -127,6 +127,25 @@ pytest tests/test_unravel_client.py::TestRiskSignalFunctions -v
 pytest tests/test_unravel_client.py::TestErrorHandling -v
 ```
 
+### VS Code launch configurations
+
+The repository now includes:
+
+- `Pytest: all tests`
+- one `Endpoint: ...` launch entry for each exported client endpoint
+
+Each endpoint launch uses sensible defaults based on the existing test suite and reads `UNRAVEL_API_KEY` from `.env`. If you want to tweak a call without editing code, pass JSON overrides when prompted, for example:
+
+```json
+{"as_of":"latest"}
+```
+
+or
+
+```json
+{"start_date":"2024-01-01","end_date":"2024-01-07"}
+```
+
 ### Test Categories
 
 - **Portfolio Functions**: Tests portfolio-related API calls using `momentum_enhanced.40` portfolio

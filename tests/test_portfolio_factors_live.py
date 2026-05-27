@@ -53,3 +53,30 @@ def test_get_portfolio_factors_live_with_smoothing(
         assert isinstance(result, pd.Series)
         assert len(result) > 0, "Should have some live factor data"
         assert pd.api.types.is_float_dtype(result), "Values should be float type"
+
+
+def test_as_of_close_vs_latest_differ(api_key, test_portfolio, test_portfolio_base):
+    """Test that as_of='close' and as_of='latest' return different results."""
+    tickers = get_tickers(
+        id=test_portfolio_base,
+        api_key=api_key,
+        universe_size=20,
+    )
+
+    if len(tickers) > 0:
+        result_close = get_portfolio_factors_live(
+            id=test_portfolio,
+            tickers=tickers[:3],
+            api_key=api_key,
+            as_of="close",
+        )
+        result_latest = get_portfolio_factors_live(
+            id=test_portfolio,
+            tickers=tickers[:3],
+            api_key=api_key,
+            as_of="latest",
+        )
+
+        assert not result_close.equals(result_latest), (
+            "as_of='close' and as_of='latest' should return different factor values"
+        )

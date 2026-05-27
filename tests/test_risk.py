@@ -55,6 +55,26 @@ def test_get_risk_overlays_live_success(api_key, test_portfolio_base):
     assert pd.api.types.is_float_dtype(result)
 
 
+def test_get_risk_overlay_live_as_of_close_vs_latest_differ(api_key, test_portfolio_base):
+    """Test that as_of='close' and as_of='latest' return different overlay dates."""
+    result_close = get_risk_overlay_live(
+        portfolio=test_portfolio_base,
+        overlay="trend",
+        api_key=api_key,
+        as_of="close",
+    )
+    result_latest = get_risk_overlay_live(
+        portfolio=test_portfolio_base,
+        overlay="trend",
+        api_key=api_key,
+        as_of="latest",
+    )
+
+    assert result_close.index[0] != result_latest.index[0], (
+        "as_of='close' and as_of='latest' should return different risk overlay dates"
+    )
+
+
 def test_get_risk_regime_success(api_key):
     """Test successful retrieval of risk regime data."""
     result = get_risk_regime(
@@ -93,3 +113,21 @@ def test_get_risk_regime_live_success(api_key):
     assert isinstance(result, pd.Series)
     assert len(result) == 1
     assert pd.api.types.is_float_dtype(result)
+
+
+def test_get_risk_regime_live_as_of_close_vs_latest_differ(api_key):
+    """Test that as_of='close' and as_of='latest' return different regime dates."""
+    result_close = get_risk_regime_live(
+        overlay="crypto_trend_consensus",
+        api_key=api_key,
+        as_of="close",
+    )
+    result_latest = get_risk_regime_live(
+        overlay="crypto_trend_consensus",
+        api_key=api_key,
+        as_of="latest",
+    )
+
+    assert result_close.index[0] != result_latest.index[0], (
+        "as_of='close' and as_of='latest' should return different risk regime dates"
+    )
