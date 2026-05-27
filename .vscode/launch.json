@@ -1,0 +1,81 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Pytest: all tests",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "module": "pytest",
+      "args": [
+        ".",
+        "-vv",
+        "-s"
+      ],
+      "cwd": "${workspaceFolder}/tests",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Endpoint: sample call",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${workspaceFolder}/scripts/run_endpoint.py",
+      "args": [
+        "--endpoint",
+        "${input:unravelEndpoint}",
+        "--overrides",
+        "${input:endpointOverrides}"
+      ],
+      "cwd": "${workspaceFolder}/scripts",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ],
+  "inputs": [
+    {
+      "id": "pytestTarget",
+      "type": "promptString",
+      "description": "Pytest target relative to the tests folder, or use an absolute path",
+      "default": "."
+    },
+    {
+      "id": "unravelEndpoint",
+      "type": "pickString",
+      "description": "Choose the endpoint to call",
+      "options": [
+        "get_historical_universe",
+        "get_live_weights",
+        "get_portfolio_factors_historical",
+        "get_portfolio_factors_live",
+        "get_portfolio_historical_weights",
+        "get_portfolio_returns",
+        "get_price",
+        "get_prices",
+        "get_risk_overlay",
+        "get_risk_overlay_live",
+        "get_risk_regime",
+        "get_risk_regime_live",
+        "get_tickers"
+      ],
+      "default": "get_live_weights"
+    },
+    {
+      "id": "endpointOverrides",
+      "type": "promptString",
+      "description": "Optional JSON overrides for the sample kwargs",
+      "default": ""
+    }
+  ]
+}
