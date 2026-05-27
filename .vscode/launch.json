@@ -22,14 +22,266 @@
       "justMyCode": true
     },
     {
-      "name": "Endpoint: sample call",
+      "name": "Endpoint: get_historical_universe",
       "type": "debugpy",
       "request": "launch",
       "python": "${config:python.defaultInterpreterPath}",
       "program": "${workspaceFolder}/scripts/run_endpoint.py",
       "args": [
         "--endpoint",
-        "${input:unravelEndpoint}",
+        "get_historical_universe",
+        "--overrides",
+        "${input:endpointOverrides}"
+      ],
+      "cwd": "${workspaceFolder}/scripts",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Endpoint: get_live_weights",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${workspaceFolder}/scripts/run_endpoint.py",
+      "args": [
+        "--endpoint",
+        "get_live_weights",
+        "--overrides",
+        "${input:endpointOverrides}"
+      ],
+      "cwd": "${workspaceFolder}/scripts",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Endpoint: get_portfolio_factors_historical",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${workspaceFolder}/scripts/run_endpoint.py",
+      "args": [
+        "--endpoint",
+        "get_portfolio_factors_historical",
+        "--overrides",
+        "${input:endpointOverrides}"
+      ],
+      "cwd": "${workspaceFolder}/scripts",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Endpoint: get_portfolio_factors_live",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${workspaceFolder}/scripts/run_endpoint.py",
+      "args": [
+        "--endpoint",
+        "get_portfolio_factors_live",
+        "--overrides",
+        "${input:endpointOverrides}"
+      ],
+      "cwd": "${workspaceFolder}/scripts",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Endpoint: get_portfolio_historical_weights",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${workspaceFolder}/scripts/run_endpoint.py",
+      "args": [
+        "--endpoint",
+        "get_portfolio_historical_weights",
+        "--overrides",
+        "${input:endpointOverrides}"
+      ],
+      "cwd": "${workspaceFolder}/scripts",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Endpoint: get_portfolio_returns",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${workspaceFolder}/scripts/run_endpoint.py",
+      "args": [
+        "--endpoint",
+        "get_portfolio_returns",
+        "--overrides",
+        "${input:endpointOverrides}"
+      ],
+      "cwd": "${workspaceFolder}/scripts",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Endpoint: get_price",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${workspaceFolder}/scripts/run_endpoint.py",
+      "args": [
+        "--endpoint",
+        "get_price",
+        "--overrides",
+        "${input:endpointOverrides}"
+      ],
+      "cwd": "${workspaceFolder}/scripts",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Endpoint: get_prices",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${workspaceFolder}/scripts/run_endpoint.py",
+      "args": [
+        "--endpoint",
+        "get_prices",
+        "--overrides",
+        "${input:endpointOverrides}"
+      ],
+      "cwd": "${workspaceFolder}/scripts",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Endpoint: get_risk_overlay",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${workspaceFolder}/scripts/run_endpoint.py",
+      "args": [
+        "--endpoint",
+        "get_risk_overlay",
+        "--overrides",
+        "${input:endpointOverrides}"
+      ],
+      "cwd": "${workspaceFolder}/scripts",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Endpoint: get_risk_overlay_live",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${workspaceFolder}/scripts/run_endpoint.py",
+      "args": [
+        "--endpoint",
+        "get_risk_overlay_live",
+        "--overrides",
+        "${input:endpointOverrides}"
+      ],
+      "cwd": "${workspaceFolder}/scripts",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Endpoint: get_risk_regime",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${workspaceFolder}/scripts/run_endpoint.py",
+      "args": [
+        "--endpoint",
+        "get_risk_regime",
+        "--overrides",
+        "${input:endpointOverrides}"
+      ],
+      "cwd": "${workspaceFolder}/scripts",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Endpoint: get_risk_regime_live",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${workspaceFolder}/scripts/run_endpoint.py",
+      "args": [
+        "--endpoint",
+        "get_risk_regime_live",
+        "--overrides",
+        "${input:endpointOverrides}"
+      ],
+      "cwd": "${workspaceFolder}/scripts",
+      "envFile": "${workspaceFolder}/.env",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src",
+        "PYTHONSAFEPATH": "1"
+      },
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Endpoint: get_tickers",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${config:python.defaultInterpreterPath}",
+      "program": "${workspaceFolder}/scripts/run_endpoint.py",
+      "args": [
+        "--endpoint",
+        "get_tickers",
         "--overrides",
         "${input:endpointOverrides}"
       ],
@@ -44,33 +296,6 @@
     }
   ],
   "inputs": [
-    {
-      "id": "pytestTarget",
-      "type": "promptString",
-      "description": "Pytest target relative to the tests folder, or use an absolute path",
-      "default": "."
-    },
-    {
-      "id": "unravelEndpoint",
-      "type": "pickString",
-      "description": "Choose the endpoint to call",
-      "options": [
-        "get_historical_universe",
-        "get_live_weights",
-        "get_portfolio_factors_historical",
-        "get_portfolio_factors_live",
-        "get_portfolio_historical_weights",
-        "get_portfolio_returns",
-        "get_price",
-        "get_prices",
-        "get_risk_overlay",
-        "get_risk_overlay_live",
-        "get_risk_regime",
-        "get_risk_regime_live",
-        "get_tickers"
-      ],
-      "default": "get_live_weights"
-    },
     {
       "id": "endpointOverrides",
       "type": "promptString",
