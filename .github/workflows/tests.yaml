@@ -25,6 +25,16 @@ jobs:
           - "3.11"
           - "3.12"
           - "3.13"
+        # setup-python has no 3.9 build for ubuntu-latest (26.04) or for
+        # macos-latest (arm64), so 3.9 runs on Ubuntu 24.04 only.
+        exclude:
+          - os: ubuntu-latest
+            python-version: "3.9"
+          - os: macos-latest
+            python-version: "3.9"
+        include:
+          - os: ubuntu-24.04
+            python-version: "3.9"
 
     runs-on: ${{ matrix.os }}
 
